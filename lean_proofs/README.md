@@ -18,10 +18,11 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
   `MunbaProofs/Optimality.lean`
 - **Theorem 2.5** (Solution characterization) — `MunbaProofs/SolutionCharacterization.lean`
 - **Lemma 2.8** (Lower bound) — `MunbaProofs/LowerBound.lean`
+- **Theorem 2.9** (Pareto improvement) — `MunbaProofs/ParetoImprovement.lean`
 
-Theorem 2.6, Theorem 2.9, Theorem 2.10, Lemma 2.4, and Remark 2.7 are not yet formalized. (Lemma
-2.8 was proved out of the paper's own numbering order — it depends only on Theorems 2.3/2.5, not
-on Theorem 2.6, so it was tractable earlier; see this project's working plan for the reasoning.)
+Theorem 2.6, Theorem 2.10, Lemma 2.4, and Remark 2.7 are not yet formalized. (Lemma 2.8 and
+Theorem 2.9 were proved out of the paper's own numbering order — neither depends on Theorem 2.6,
+so both were tractable before it; see this project's working plan for the reasoning.)
 
 ## How to build
 
@@ -78,6 +79,10 @@ checkout can exceed `MAX_PATH`.
   "corrected chain" `catalog.json` recommends, since the paper's own Eq. 37 is confirmed mistyped
   in the authors' own LaTeX source), then Cauchy-Schwarz plus the gradient-norm bound gives the
   paper's `α_i ≥ 1/(√2 M)` bound directly.
+
+- `MunbaProofs/ParetoImprovement.lean` — Theorem 2.9. Factors the paper's symmetric-in-`r,f`
+  argument into a single-player descent step (proved once, reusing Lemma 6.1's descent inequality
+  and Lemma 2.8's `‖g̃*‖²=2`), applied twice to get the two-player theorem.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this

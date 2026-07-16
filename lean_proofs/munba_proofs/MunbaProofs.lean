@@ -7,3 +7,4 @@ import MunbaProofs.SphereExtremum
 import MunbaProofs.Optimality
 import MunbaProofs.SolutionCharacterization
 import MunbaProofs.LowerBound
+import MunbaProofs.ParetoImprovement
