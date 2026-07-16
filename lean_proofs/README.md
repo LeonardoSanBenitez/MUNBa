@@ -16,8 +16,9 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Theorem 2.3** (Optimality condition, the KKT-style stationarity result) —
   `MunbaProofs/NashObjective.lean` + `MunbaProofs/SphereExtremum.lean` +
   `MunbaProofs/Optimality.lean`
+- **Theorem 2.5** (Solution characterization) — `MunbaProofs/SolutionCharacterization.lean`
 
-Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, and Remark 2.7 are not yet formalized.
+Theorems 2.6/2.9/2.10, Lemma 2.4, and Remark 2.7 are not yet formalized.
 
 ## How to build
 
@@ -65,6 +66,10 @@ checkout can exceed `MAX_PATH`.
   only at a specific ball radius, `ε = √2`, never stated explicitly in the paper (though consistent
   with, and the real reason behind, `‖g̃*‖²=2` reappearing in two of the paper's own later proofs).
   This file takes `ε=√2` as an explicit hypothesis rather than leaving it an unexplained given.
+
+- `MunbaProofs/SolutionCharacterization.lean` — Theorem 2.5. A direct algebraic corollary of
+  Theorem 2.3's own conclusion: dotting `g̃* = α_r g_r + α_f g_f` with `g_r` and `g_f` gives the
+  paper's 2x2 Gram-matrix system (Eq. 7) via bilinearity, no new machinery needed.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this

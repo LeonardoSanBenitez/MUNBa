@@ -5,3 +5,4 @@ import MunbaProofs.DescentLemma
 import MunbaProofs.NashObjective
 import MunbaProofs.SphereExtremum
 import MunbaProofs.Optimality
+import MunbaProofs.SolutionCharacterization
