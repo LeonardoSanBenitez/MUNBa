@@ -12,10 +12,10 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 
 - **Lemma 2.1** (Feasibility) — `MunbaProofs/Feasibility.lean`
 - **Lemma 2.2** (Cone property) — `MunbaProofs/ConeProperty.lean`
+- **Lemma 6.1** (Lipschitz-smoothness descent lemma) — `MunbaProofs/DescentLemma.lean`
 
 Everything else in the paper's theoretical results (Theorem 2.3's KKT optimality condition,
-Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, Lemma 6.1's descent lemma, Remark 2.7) is not yet
-formalized.
+Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, Remark 2.7) is not yet formalized.
 
 ## How to build
 
@@ -39,6 +39,14 @@ checkout can exceed `MAX_PATH`.
 - `MunbaProofs/ConeProperty.lean` — Lemma 2.2. States and proves the general fact underlying it
   (the positivity region of any pair of degree-1-positively-homogeneous functions is a cone), then
   derives the paper's specific statement as a corollary.
+
+- `MunbaProofs/DescentLemma.lean` — Lemma 6.1 (the Lipschitz-smoothness descent lemma). This
+  result is a special case of general facts already in Mathlib, so rather than reproving it from
+  scratch, this file states MUNBa's own Lemma 6.1 in the paper's own notation and shows explicitly
+  how it follows by specializing two existing Mathlib theorems (`HasGradientAt` and a general
+  derivative-comparison "fencing" theorem) — the file's docstring names both and explains the
+  correspondence, so the mapping between the paper's claim and the library facts is legible on its
+  own, not just "code that happens to compile."
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
