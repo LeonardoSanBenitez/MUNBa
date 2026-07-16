@@ -13,17 +13,11 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Lemma 2.1** (Feasibility) — `MunbaProofs/Feasibility.lean`
 - **Lemma 2.2** (Cone property) — `MunbaProofs/ConeProperty.lean`
 - **Lemma 6.1** (Lipschitz-smoothness descent lemma) — `MunbaProofs/DescentLemma.lean`
+- **Theorem 2.3** (Optimality condition, the KKT-style stationarity result) —
+  `MunbaProofs/NashObjective.lean` + `MunbaProofs/SphereExtremum.lean` +
+  `MunbaProofs/Optimality.lean`
 
-Also proved, as supporting building blocks toward **Theorem 2.3** (the KKT optimality condition —
-not yet complete in full):
-- `MunbaProofs/NashObjective.lean` — the objective's scale-shift identity, and that the paper's
-  ball constraint must be active at any maximizer (a gap in the paper's own proof, not just ours).
-- `MunbaProofs/SphereExtremum.lean` — the paper's two positivity constraints can be dropped
-  entirely when characterizing a maximizer (they are never binding at any feasible point).
-
-Theorem 2.3 itself (the Lagrange-multiplier stationarity conclusion) is not yet complete; see this
-project's own working plan for exact status. Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, and Remark 2.7
-are not yet formalized.
+Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, and Remark 2.7 are not yet formalized.
 
 ## How to build
 
@@ -55,6 +49,22 @@ checkout can exceed `MAX_PATH`.
   derivative-comparison "fencing" theorem) — the file's docstring names both and explains the
   correspondence, so the mapping between the paper's claim and the library facts is legible on its
   own, not just "code that happens to compile."
+
+- **Theorem 2.3** (Optimality condition) — the paper's KKT-style stationarity result, built as
+  three files: `NashObjective.lean` (the objective's scale-shift identity, and a genuinely useful
+  finding — a proof that the paper's own ball constraint must be active at the optimum, a gap in
+  the PAPER's own proof, not just ours); `SphereExtremum.lean` (the paper's two positivity
+  constraints can be dropped entirely, since they are never binding at any feasible point — a more
+  fundamental reason than the paper's own complementary-slackness argument); `Optimality.lean`
+  (the actual Lagrange-multiplier assembly, specializing Mathlib's
+  `IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d` together with `hasStrictFDerivAt_
+  norm_sq` and `HasStrictFDerivAt.log`, all named and explained in the file's own docstring).
+  One clarification worth being explicit about: the paper's proof reaches its boxed conclusion
+  (`g̃* = α_r g_r + α_f g_f`) via a "set λ=1 as a normalization step" move that reads as a free
+  choice but is not — working through the argument in full shows this holds as an exact equality
+  only at a specific ball radius, `ε = √2`, never stated explicitly in the paper (though consistent
+  with, and the real reason behind, `‖g̃*‖²=2` reappearing in two of the paper's own later proofs).
+  This file takes `ε=√2` as an explicit hypothesis rather than leaving it an unexplained given.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this

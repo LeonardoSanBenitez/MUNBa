@@ -4,3 +4,4 @@ import MunbaProofs.ConeProperty
 import MunbaProofs.DescentLemma
 import MunbaProofs.NashObjective
 import MunbaProofs.SphereExtremum
+import MunbaProofs.Optimality
