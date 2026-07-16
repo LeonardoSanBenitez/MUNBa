@@ -6,3 +6,4 @@ import MunbaProofs.NashObjective
 import MunbaProofs.SphereExtremum
 import MunbaProofs.Optimality
 import MunbaProofs.SolutionCharacterization
+import MunbaProofs.LowerBound
