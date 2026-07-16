@@ -2,3 +2,5 @@ import MunbaProofs.Basic
 import MunbaProofs.Feasibility
 import MunbaProofs.ConeProperty
 import MunbaProofs.DescentLemma
+import MunbaProofs.NashObjective
+import MunbaProofs.SphereExtremum

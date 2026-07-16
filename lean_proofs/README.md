@@ -14,8 +14,16 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Lemma 2.2** (Cone property) — `MunbaProofs/ConeProperty.lean`
 - **Lemma 6.1** (Lipschitz-smoothness descent lemma) — `MunbaProofs/DescentLemma.lean`
 
-Everything else in the paper's theoretical results (Theorem 2.3's KKT optimality condition,
-Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, Remark 2.7) is not yet formalized.
+Also proved, as supporting building blocks toward **Theorem 2.3** (the KKT optimality condition —
+not yet complete in full):
+- `MunbaProofs/NashObjective.lean` — the objective's scale-shift identity, and that the paper's
+  ball constraint must be active at any maximizer (a gap in the paper's own proof, not just ours).
+- `MunbaProofs/SphereExtremum.lean` — the paper's two positivity constraints can be dropped
+  entirely when characterizing a maximizer (they are never binding at any feasible point).
+
+Theorem 2.3 itself (the Lagrange-multiplier stationarity conclusion) is not yet complete; see this
+project's own working plan for exact status. Theorems 2.5/2.6/2.9/2.10, Lemma 2.4, and Remark 2.7
+are not yet formalized.
 
 ## How to build
 
