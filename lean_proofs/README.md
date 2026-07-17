@@ -20,10 +20,12 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Lemma 2.8** (Lower bound) — `MunbaProofs/LowerBound.lean`
 - **Theorem 2.9** (Pareto improvement) — `MunbaProofs/ParetoImprovement.lean`
 - **Theorem 2.6** (Closed-form solution) — `MunbaProofs/ClosedFormSolution.lean`
+- **Remark 2.7** (degenerate Gram matrix) — `MunbaProofs/DegenerateGram.lean`
 
-Theorem 2.10, Lemma 2.4, and Remark 2.7 are not yet formalized. (Lemma 2.8 and Theorem 2.9 were
-proved before Theorem 2.6, out of the paper's own numbering order — neither depends on it, so
-both were tractable earlier; see this project's working plan for the reasoning.)
+Only **Theorem 2.10** and **Lemma 2.4** remain — both need the same open Pareto-stationarity
+question (see this project's working plan). (Lemma 2.8 and Theorem 2.9 were proved before
+Theorem 2.6, out of the paper's own numbering order — neither depends on it, so both were
+tractable earlier; see the working plan for the reasoning.)
 
 ## How to build
 
@@ -95,6 +97,10 @@ checkout can exceed `MAX_PATH`.
   is already known from Theorem 2.3, not something being solved for). Independently checked
   (symbolically and numerically) that this reproduces the paper's own formula exactly before
   writing any Lean.
+
+- `MunbaProofs/DegenerateGram.lean` — Remark 2.7. Only the remark's actual mathematical claim
+  (linearly dependent gradients make the Gram matrix singular) is proved; the noise-injection and
+  `α=[0.5,0.5]` heuristics the remark also mentions are engineering choices, not formalized.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
