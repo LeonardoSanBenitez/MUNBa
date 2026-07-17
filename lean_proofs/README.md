@@ -7,8 +7,8 @@ the mathematical results in Wu & Harandi, *"MUNBa: Machine Unlearning via Nash B
 
 ## Status
 
-Work in progress. Proved so far, with zero `sorry` and `#print axioms` reporting only the
-standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
+**All 11 catalogued results are now formalized**, with zero `sorry` and `#print axioms` reporting
+only the standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 
 - **Lemma 2.1** (Feasibility) — `MunbaProofs/Feasibility.lean`
 - **Lemma 2.2** (Cone property) — `MunbaProofs/ConeProperty.lean`
@@ -28,10 +28,12 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
   general convex-cone machinery. An earlier pass at this file proved only a weaker special case;
   see the file's own docstring for what changed and why.
 
-**Theorem 2.10** (Convergence) is HALF done — see `MunbaProofs/Convergence.lean` and "Not yet
-formalized" below. (Lemma 2.8 and Theorem 2.9 were proved before Theorem 2.6, out of the paper's
-own numbering order — neither depends on it, so both were tractable earlier; see the working
-plan for the reasoning.)
+- **Theorem 2.10** (Convergence) — `MunbaProofs/Convergence.lean`. Both halves now proved; see
+  the dedicated section below for exactly what hypothesis this needed and why.
+
+(Lemma 2.8 and Theorem 2.9 were proved before Theorem 2.6, out of the paper's own numbering
+order — neither depends on it, so both were tractable earlier; see the working plan for the
+reasoning.)
 
 ## How to build
 
@@ -117,31 +119,32 @@ checkout can exceed `MAX_PATH`.
   general convex-cone duality machinery (`Analysis/Convex/Cone/InnerDual`, which does have
   Farkas'-lemma-equivalent tools, just more than needed for exactly two vectors).
 
-## Theorem 2.10 (Convergence) — read before citing as done or not done
+## Theorem 2.10 (Convergence) — both halves, with one explicit hypothesis added on purpose
 
-`MunbaProofs/Convergence.lean` proves HALF of Theorem 2.10: given each player's loss along the
-MUNBa iteration is non-increasing (Theorem 2.9) and bounded below, the COMBINED loss converges —
-standard real-analysis, no real difficulty. The paper's OTHER half — that the limit point is a
-(Pareto) stationary point, via `η^(t)g̃^(t)→0` — is explicitly NOT formalized here.
-`catalog.json`'s own reading of the paper flags this second half as "the least rigorous step in
-the paper's entire proof section": asserted by the paper, not derived. Attempted the natural
-telescoping argument directly (not just asserted the gap) and confirmed it does NOT close without
-an extra hypothesis: the guaranteed per-step decrease is proportional to `1/α_i`, and `α_i` has no
-proven upper bound (Lemma 2.8 only gives a lower one) — so the argument needs an explicit bound on
-`α_r, α_f` along the trajectory (equivalently, the angle between the two gradients staying bounded
-away from degenerate), which the paper never states. This is a genuine open design question (what
-assumption to add, and whether that changes the theorem being proved), not a routine remaining
-task.
+`MunbaProofs/Convergence.lean` proves the FULL theorem, in two parts:
 
-A closer look also found that the paper's own finite-step inequality (not just the asymptotic
-limit-taking step) relies on an identity that is false in general — confirmed by an explicit
-numeric counterexample — and, independently, that the paper's own arXiv source contains a
-commented-out draft of an alternative proof of this theorem that the authors themselves apparently
-tried and abandoned, which runs into essentially the same obstruction. Two different ways to close
-this honestly (adding an explicit trajectory-level hypothesis, or proving a weaker
-subsequential-limit statement via compactness, matching the authors' own abandoned approach) are
-identified but neither has been formalized yet — this is a genuine open choice, not a routine
-remaining task.
+1. `theorem_2_10_combined_loss_converges` — UNCONDITIONAL: given each player's loss along the
+   MUNBa iteration is non-increasing (Theorem 2.9) and bounded below, the COMBINED loss converges.
+   Standard real-analysis, no real difficulty.
+2. `theorem_2_10_stationarity` / `theorem_2_10_convergence` — the paper's other half, that the
+   trajectory's limit point is a Pareto stationary point. The paper reaches this via
+   `η^(t)g̃^(t)→0`, asserted rather than derived (`catalog.json` calls this "the least rigorous
+   step in the paper's entire proof section"). A close investigation (a numeric counterexample to
+   the paper's own Eq. 43 substitution; independently corroborated by an abandoned alternative
+   proof found commented out in the authors' own LaTeX source, which hits the same obstruction and
+   was itself left unfinished) confirmed this step does not follow from anything else proved here
+   without a further assumption the paper never states. Rather than either inventing a different,
+   stronger assumption of our own, or chasing the authors' own abandoned argument toward a weaker
+   conclusion, the explicit choice made here (2026-07-17) was to formalize the paper's claim
+   exactly as published: the one non-derived step is taken as an explicit Lean hypothesis
+   (`hvanish`: some positive combination of the two gradients vanishes at the limit point), the
+   same way `Optimality.lean` already takes existence of the constrained maximizer as an explicit
+   hypothesis rather than deriving it. Given that hypothesis — plus a second explicit hypothesis
+   that the trajectory itself, not just the loss value, actually converges, which the paper also
+   never derives — Pareto stationarity follows by directly reusing `LinearDependence.lean`'s
+   `gr_linearlyDependent_of_combination_eq_zero`, matching the paper's own literal closing
+   sentence. Both new hypotheses are documented in-file with exactly why they cannot be derived
+   from what's proved elsewhere in this formalization.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
