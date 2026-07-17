@@ -133,6 +133,16 @@ away from degenerate), which the paper never states. This is a genuine open desi
 assumption to add, and whether that changes the theorem being proved), not a routine remaining
 task.
 
+A closer look also found that the paper's own finite-step inequality (not just the asymptotic
+limit-taking step) relies on an identity that is false in general — confirmed by an explicit
+numeric counterexample — and, independently, that the paper's own arXiv source contains a
+commented-out draft of an alternative proof of this theorem that the authors themselves apparently
+tried and abandoned, which runs into essentially the same obstruction. Two different ways to close
+this honestly (adding an explicit trajectory-level hypothesis, or proving a weaker
+subsequential-limit statement via compactness, matching the authors' own abandoned approach) are
+identified but neither has been formalized yet — this is a genuine open choice, not a routine
+remaining task.
+
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
 project's own working catalog, not duplicated here.
