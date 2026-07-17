@@ -124,10 +124,14 @@ MUNBa iteration is non-increasing (Theorem 2.9) and bounded below, the COMBINED 
 standard real-analysis, no real difficulty. The paper's OTHER half — that the limit point is a
 (Pareto) stationary point, via `η^(t)g̃^(t)→0` — is explicitly NOT formalized here.
 `catalog.json`'s own reading of the paper flags this second half as "the least rigorous step in
-the paper's entire proof section": asserted by the paper, not derived, and it needs a structural
-assumption (e.g. a summability bound on the step sizes) the paper never states precisely enough
-to formalize as given. This is a genuine open design question (what assumption to add, and
-whether that changes the theorem being proved), not a routine remaining task.
+the paper's entire proof section": asserted by the paper, not derived. Attempted the natural
+telescoping argument directly (not just asserted the gap) and confirmed it does NOT close without
+an extra hypothesis: the guaranteed per-step decrease is proportional to `1/α_i`, and `α_i` has no
+proven upper bound (Lemma 2.8 only gives a lower one) — so the argument needs an explicit bound on
+`α_r, α_f` along the trajectory (equivalently, the angle between the two gradients staying bounded
+away from degenerate), which the paper never states. This is a genuine open design question (what
+assumption to add, and whether that changes the theorem being proved), not a routine remaining
+task.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
