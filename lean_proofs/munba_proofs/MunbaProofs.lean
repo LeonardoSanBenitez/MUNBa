@@ -11,3 +11,4 @@ import MunbaProofs.ParetoImprovement
 import MunbaProofs.ClosedFormSolution
 import MunbaProofs.DegenerateGram
 import MunbaProofs.LinearDependence
+import MunbaProofs.Convergence

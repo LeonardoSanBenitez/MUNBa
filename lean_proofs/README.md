@@ -26,10 +26,10 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
   literal formalization of the paper's own stated hypothesis ("Pareto stationary point," a
   notion the paper never defines).**
 
-Only **Theorem 2.10** (Convergence) remains — see "Not yet formalized" below; it needs
-sequence-convergence/limit machinery, a different kind of task than everything above. (Lemma 2.8
-and Theorem 2.9 were proved before Theorem 2.6, out of the paper's own numbering order — neither
-depends on it, so both were tractable earlier; see the working plan for the reasoning.)
+**Theorem 2.10** (Convergence) is HALF done — see `MunbaProofs/Convergence.lean` and "Not yet
+formalized" below. (Lemma 2.8 and Theorem 2.9 were proved before Theorem 2.6, out of the paper's
+own numbering order — neither depends on it, so both were tractable earlier; see the working
+plan for the reasoning.)
 
 ## How to build
 
@@ -119,13 +119,17 @@ checkout can exceed `MAX_PATH`.
   file proves what MUNBa actually uses, not a from-scratch re-derivation of general
   Pareto-stationarity theory.
 
-## Not yet formalized
+## Theorem 2.10 (Convergence) — read before citing as done or not done
 
-**Theorem 2.10 (Convergence)** is the only remaining item, and needs machinery of a different
-KIND than everything above: real-sequence convergence/limit theory, not linear algebra or
-single-step calculus. Its hardest step — `catalog.json`'s own reading of the paper flags this as
-"the least rigorous step in the paper's entire proof section" — is asserted by the paper, not
-derived, and remains open.
+`MunbaProofs/Convergence.lean` proves HALF of Theorem 2.10: given each player's loss along the
+MUNBa iteration is non-increasing (Theorem 2.9) and bounded below, the COMBINED loss converges —
+standard real-analysis, no real difficulty. The paper's OTHER half — that the limit point is a
+(Pareto) stationary point, via `η^(t)g̃^(t)→0` — is explicitly NOT formalized here.
+`catalog.json`'s own reading of the paper flags this second half as "the least rigorous step in
+the paper's entire proof section": asserted by the paper, not derived, and it needs a structural
+assumption (e.g. a summability bound on the step sizes) the paper never states precisely enough
+to formalize as given. This is a genuine open design question (what assumption to add, and
+whether that changes the theorem being proved), not a routine remaining task.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
