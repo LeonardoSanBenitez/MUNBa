@@ -21,11 +21,15 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Theorem 2.9** (Pareto improvement) — `MunbaProofs/ParetoImprovement.lean`
 - **Theorem 2.6** (Closed-form solution) — `MunbaProofs/ClosedFormSolution.lean`
 - **Remark 2.7** (degenerate Gram matrix) — `MunbaProofs/DegenerateGram.lean`
+- **Lemma 2.4** (Linear dependence) — `MunbaProofs/LinearDependence.lean`, **with an important
+  caveat, stated precisely below — this proves the fact MUNBa's own proof actually needs, not a
+  literal formalization of the paper's own stated hypothesis ("Pareto stationary point," a
+  notion the paper never defines).**
 
-Only **Theorem 2.10** and **Lemma 2.4** remain — both need the same open Pareto-stationarity
-question (see this project's working plan). (Lemma 2.8 and Theorem 2.9 were proved before
-Theorem 2.6, out of the paper's own numbering order — neither depends on it, so both were
-tractable earlier; see the working plan for the reasoning.)
+Only **Theorem 2.10** (Convergence) remains — see "Not yet formalized" below; it needs
+sequence-convergence/limit machinery, a different kind of task than everything above. (Lemma 2.8
+and Theorem 2.9 were proved before Theorem 2.6, out of the paper's own numbering order — neither
+depends on it, so both were tractable earlier; see the working plan for the reasoning.)
 
 ## How to build
 
@@ -101,6 +105,27 @@ checkout can exceed `MAX_PATH`.
 - `MunbaProofs/DegenerateGram.lean` — Remark 2.7. Only the remark's actual mathematical claim
   (linearly dependent gradients make the Gram matrix singular) is proved; the noise-injection and
   `α=[0.5,0.5]` heuristics the remark also mentions are engineering choices, not formalized.
+
+- `MunbaProofs/LinearDependence.lean` — Lemma 2.4. **Read the file's own docstring before citing
+  this as "Lemma 2.4 formalized."** The paper's own Lemma 2.4 hypothesis is "at a Pareto
+  stationary point" (a notion the paper never defines), proved via an imported external
+  first-order Pareto-optimality condition (Ye–Liu 2022 / Roy–So–Ma 2023) — genuinely open
+  territory in every mainstream proof assistant, not attempted here. What IS proved: the
+  elementary fact both Lemma 2.4's own proof and Theorem 2.10's closing argument actually reduce
+  to once that external condition is instantiated for MUNBa's specific setup — a positive
+  combination `α_r g_r + α_f g_f` vanishing forces `g_r, g_f` linearly dependent. Confirmed (by
+  grepping the paper's own LaTeX source) that Lemma 2.4 is never cross-referenced elsewhere in
+  the paper, i.e. its own external-condition-based proof is decorative, not load-bearing — this
+  file proves what MUNBa actually uses, not a from-scratch re-derivation of general
+  Pareto-stationarity theory.
+
+## Not yet formalized
+
+**Theorem 2.10 (Convergence)** is the only remaining item, and needs machinery of a different
+KIND than everything above: real-sequence convergence/limit theory, not linear algebra or
+single-step calculus. Its hardest step — `catalog.json`'s own reading of the paper flags this as
+"the least rigorous step in the paper's entire proof section" — is asserted by the paper, not
+derived, and remains open.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this

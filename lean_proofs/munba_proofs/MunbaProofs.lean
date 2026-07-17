@@ -10,3 +10,4 @@ import MunbaProofs.LowerBound
 import MunbaProofs.ParetoImprovement
 import MunbaProofs.ClosedFormSolution
 import MunbaProofs.DegenerateGram
+import MunbaProofs.LinearDependence
