@@ -21,10 +21,12 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Theorem 2.9** (Pareto improvement) — `MunbaProofs/ParetoImprovement.lean`
 - **Theorem 2.6** (Closed-form solution) — `MunbaProofs/ClosedFormSolution.lean`
 - **Remark 2.7** (degenerate Gram matrix) — `MunbaProofs/DegenerateGram.lean`
-- **Lemma 2.4** (Linear dependence) — `MunbaProofs/LinearDependence.lean`, **with an important
-  caveat, stated precisely below — this proves the fact MUNBa's own proof actually needs, not a
-  literal formalization of the paper's own stated hypothesis ("Pareto stationary point," a
-  notion the paper never defines).**
+- **Lemma 2.4** (Linear dependence) — `MunbaProofs/LinearDependence.lean`. Proved from an actual
+  Pareto-stationarity hypothesis (no common strict descent direction for `g_r, g_f`) via a
+  two-vector instance of Gordan's theorem of the alternative, with a short constructive proof
+  (solve the 2×2 Gram system via Cramer's rule for an explicit witness direction) rather than
+  general convex-cone machinery. An earlier pass at this file proved only a weaker special case;
+  see the file's own docstring for what changed and why.
 
 **Theorem 2.10** (Convergence) is HALF done — see `MunbaProofs/Convergence.lean` and "Not yet
 formalized" below. (Lemma 2.8 and Theorem 2.9 were proved before Theorem 2.6, out of the paper's
@@ -106,18 +108,14 @@ checkout can exceed `MAX_PATH`.
   (linearly dependent gradients make the Gram matrix singular) is proved; the noise-injection and
   `α=[0.5,0.5]` heuristics the remark also mentions are engineering choices, not formalized.
 
-- `MunbaProofs/LinearDependence.lean` — Lemma 2.4. **Read the file's own docstring before citing
-  this as "Lemma 2.4 formalized."** The paper's own Lemma 2.4 hypothesis is "at a Pareto
-  stationary point" (a notion the paper never defines), proved via an imported external
-  first-order Pareto-optimality condition (Ye–Liu 2022 / Roy–So–Ma 2023) — genuinely open
-  territory in every mainstream proof assistant, not attempted here. What IS proved: the
-  elementary fact both Lemma 2.4's own proof and Theorem 2.10's closing argument actually reduce
-  to once that external condition is instantiated for MUNBa's specific setup — a positive
-  combination `α_r g_r + α_f g_f` vanishing forces `g_r, g_f` linearly dependent. Confirmed (by
-  grepping the paper's own LaTeX source) that Lemma 2.4 is never cross-referenced elsewhere in
-  the paper, i.e. its own external-condition-based proof is decorative, not load-bearing — this
-  file proves what MUNBa actually uses, not a from-scratch re-derivation of general
-  Pareto-stationarity theory.
+- `MunbaProofs/LinearDependence.lean` — Lemma 2.4, proved from an actual "no common strict
+  descent direction" Pareto-stationarity hypothesis. The paper's own proof imports an external
+  first-order Pareto-optimality condition (Ye–Liu 2022 / Roy–So–Ma 2023); this file instead
+  proves the needed two-vector case directly and constructively (Gordan's theorem of the
+  alternative, solved via the same 2×2-Gram-system technique as Theorem 2.6), which turned out to
+  be short and self-contained rather than requiring either the external citation or Mathlib's
+  general convex-cone duality machinery (`Analysis/Convex/Cone/InnerDual`, which does have
+  Farkas'-lemma-equivalent tools, just more than needed for exactly two vectors).
 
 ## Theorem 2.10 (Convergence) — read before citing as done or not done
 
