@@ -8,3 +8,4 @@ import MunbaProofs.Optimality
 import MunbaProofs.SolutionCharacterization
 import MunbaProofs.LowerBound
 import MunbaProofs.ParetoImprovement
+import MunbaProofs.ClosedFormSolution

@@ -19,10 +19,11 @@ standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
 - **Theorem 2.5** (Solution characterization) — `MunbaProofs/SolutionCharacterization.lean`
 - **Lemma 2.8** (Lower bound) — `MunbaProofs/LowerBound.lean`
 - **Theorem 2.9** (Pareto improvement) — `MunbaProofs/ParetoImprovement.lean`
+- **Theorem 2.6** (Closed-form solution) — `MunbaProofs/ClosedFormSolution.lean`
 
-Theorem 2.6, Theorem 2.10, Lemma 2.4, and Remark 2.7 are not yet formalized. (Lemma 2.8 and
-Theorem 2.9 were proved out of the paper's own numbering order — neither depends on Theorem 2.6,
-so both were tractable before it; see this project's working plan for the reasoning.)
+Theorem 2.10, Lemma 2.4, and Remark 2.7 are not yet formalized. (Lemma 2.8 and Theorem 2.9 were
+proved before Theorem 2.6, out of the paper's own numbering order — neither depends on it, so
+both were tractable earlier; see this project's working plan for the reasoning.)
 
 ## How to build
 
@@ -83,6 +84,17 @@ checkout can exceed `MAX_PATH`.
 - `MunbaProofs/ParetoImprovement.lean` — Theorem 2.9. Factors the paper's symmetric-in-`r,f`
   argument into a single-player descent step (proved once, reusing Lemma 6.1's descent inequality
   and Lemma 2.8's `‖g̃*‖²=2`), applied twice to get the two-player theorem.
+
+- `MunbaProofs/ClosedFormSolution.lean` — Theorem 2.6, the hardest item in the catalog (the
+  paper's own route is quartic elimination → quadratic formula → an informally-justified sign
+  choice, with two flagged gaps: an unaddressed `⟪g_r,g_f⟫=0` case, and the sign choice itself
+  asserted rather than proved). This file proves the paper's own stated closed form via a
+  genuinely simpler route found while planning: multiplying Theorem 2.5's two equations through
+  by `α_r`, `α_f` (no division) gives two expressions both equal to `1`, so `α_r²‖g_r‖² =
+  α_f²‖g_f‖²` directly — no quartic, no case split, and no sign ambiguity (since `α_r, α_f > 0`
+  is already known from Theorem 2.3, not something being solved for). Independently checked
+  (symbolically and numerically) that this reproduces the paper's own formula exactly before
+  writing any Lean.
 
 Full mathematical detail — formal statements, hypotheses, complete proof transcriptions from the
 paper, and known issues/typos found in the published proofs on close reading — lives in this
