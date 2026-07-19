@@ -1,5 +1,5 @@
-import MunbaProofs.LowerBound
-import MunbaProofs.DescentLemma
+import LowerBound
+import DescentLemma
 
 /-!
 # Theorem 2.9 (Pareto improvement)
@@ -14,8 +14,8 @@ The paper's proof is symmetric in `r, f` — the same computation, once per play
 player's own `α_i` and gradient. This file factors that out as `single_player_descent_step` (any
 one player's loss doesn't increase, given only ITS OWN Lipschitz-smoothness, its own bargaining
 coefficient, and the shared learning-rate cap), then assembles Theorem 2.9 itself as two
-applications of it. Reuses `MunbaProofs.DescentLemma`'s Lemma 6.1 (the descent inequality) and
-`MunbaProofs.LowerBound`'s `norm_sq_eq_two` (`‖g̃*‖²=2`, Eq. 41 in the paper — the same identity
+applications of it. Reuses `DescentLemma`'s Lemma 6.1 (the descent inequality) and
+`LowerBound`'s `norm_sq_eq_two` (`‖g̃*‖²=2`, Eq. 41 in the paper — the same identity
 Lemma 2.8 needs, not duplicated).
 -/
 

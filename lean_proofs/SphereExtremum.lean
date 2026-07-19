@@ -1,4 +1,4 @@
-import MunbaProofs.NashObjective
+import NashObjective
 import Mathlib.Analysis.InnerProductSpace.Continuous
 import Mathlib.Topology.Order.LocalExtr
 
@@ -7,10 +7,11 @@ import Mathlib.Topology.Order.LocalExtr
 
 `catalog.json`'s `theorem_2_3_optimality_condition`. Second building block (after
 `NashObjective.lean`'s "the ball constraint is active" argument): the paper's Theorem 2.3 sets up
-a 3-constraint optimization (one ball constraint, two strict-positivity constraints), but since
-`gt ∈ feasibleSet g_r g_f` means the positivity constraints are open/strict, they can never be
-BINDING at a feasible point — a genuinely simpler reason than the paper's own "complementary
-slackness" argument (Eq. 19), which needed the KKT multipliers `ζ_r, ζ_f` to conclude they vanish.
+a 3-constraint optimization (one ball constraint, two strict-positivity constraints). Since
+`gt ∈ feasibleSet g_r g_f` means the positivity constraints are open/strict, they are never
+binding at a feasible point, so they can be dropped from the first-order analysis (where the
+paper's proof instead concludes they are inactive via complementary slackness on the KKT
+multipliers `ζ_r, ζ_f`, Eq. 19).
 Here we show directly that a maximizer over `ball ∩ feasibleSet` is already a local extremum of
 the objective on the SPHERE alone (dropping `feasibleSet` from the constraint set entirely) — the
 exact hypothesis shape Mathlib's Lagrange multiplier theorem needs

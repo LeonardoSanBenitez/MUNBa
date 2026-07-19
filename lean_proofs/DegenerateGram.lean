@@ -1,4 +1,4 @@
-import MunbaProofs.Basic
+import Basic
 
 /-!
 # Remark 2.7 (degenerate/aligned-gradient case)

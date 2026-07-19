@@ -1,4 +1,4 @@
-import MunbaProofs.SolutionCharacterization
+import SolutionCharacterization
 
 /-!
 # Lemma 2.8 (Lower bound)
@@ -8,13 +8,10 @@ import MunbaProofs.SolutionCharacterization
 
 ## The corrected chain
 
-`catalog.json`'s `known_issues_in_paper` flags the paper's own Eq. (37) as dimensionally
-inconsistent (a scalar wrapped in a squared-vector-norm notation, confirmed against the authors'
-own LaTeX source, complete with the co-authors' own unresolved review comments marking this
-passage as rough even in their own drafting). The catalog's `formalization_notes` recommend
-formalizing via the CORRECTED chain instead — `‖g̃*‖² = 2` by direct bilinear expansion (exactly
-how Theorem 2.9's own proof does it cleanly) — rather than transcribing the paper's mistyped
-intermediate steps. That is what this file does.
+`catalog.json`'s `known_issues_in_paper` notes that Eq. (37)'s middle lines wrap a squared norm
+`‖·‖²` around a scalar (the dot product `(α_i g_i + α_j g_j)ᵀ g̃`). This file formalizes the
+corrected reading: `‖g̃*‖² = 2` by direct bilinear expansion (the same computation Theorem 2.9's
+proof uses in Eq. 41), then Cauchy-Schwarz and a one-line inversion give the bound.
 -/
 
 namespace Munba

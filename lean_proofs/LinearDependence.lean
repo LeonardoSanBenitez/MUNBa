@@ -1,4 +1,4 @@
-import MunbaProofs.Basic
+import Basic
 
 /-!
 # Lemma 2.4 (Linear dependence)
@@ -28,11 +28,9 @@ constructively, by contraposition: if `g_r, g_f` are linearly INDEPENDENT (Gram 
 because the Gram determinant is nonzero), and `d := -(a•g_r + b•g_f)` is then an EXPLICIT common
 strict descent direction: `⟪g_r,d⟫ = ⟪g_f,d⟫ = -1 < 0`. Contraposing gives Lemma 2.4.
 
-(An earlier pass at this file proved only a weaker special case — "if a positive combination
-`α_r•g_r+α_f•g_f` already vanishes, `g_r,g_f` are dependent," taking the vanishing combination as
-a hypothesis rather than deriving it from a genuine Pareto-stationarity condition. That result is
-kept below as `gr_linearlyDependent_of_combination_eq_zero`, since it is still true and used
-elsewhere, but it is no longer presented as "Lemma 2.4" — the theorem below is.)
+This file also provides the elementary helper `gr_linearlyDependent_of_combination_eq_zero`
+(if a positive combination `α_r•g_r+α_f•g_f` vanishes, then `g_r, g_f` are dependent), which
+Theorem 2.10's closing argument reuses.
 -/
 
 namespace Munba
@@ -88,9 +86,7 @@ theorem lemma_2_4_linear_dependence {g_r g_f : V}
   exact hstationary d ⟨hd1, hd2⟩
 
 /-- The elementary fact also used by Theorem 2.10's closing argument: if a positive combination
-`α_r • g_r + α_f • g_f` vanishes, `g_r` is an explicit scalar multiple of `g_f`. (Kept from an
-earlier pass at this file — no longer presented as "Lemma 2.4" itself, see the module docstring,
-but still true and still useful as a concrete witness.) -/
+`α_r • g_r + α_f • g_f` vanishes, `g_r` is an explicit scalar multiple of `g_f`. -/
 theorem gr_linearlyDependent_of_combination_eq_zero {g_r g_f : V} {α_r α_f : ℝ}
     (hα_r : α_r ≠ 0) (heq : α_r • g_r + α_f • g_f = 0) :
     g_r = (-α_f / α_r) • g_f := by

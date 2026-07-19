@@ -1,5 +1,5 @@
-import MunbaProofs.ParetoImprovement
-import MunbaProofs.LinearDependence
+import ParetoImprovement
+import LinearDependence
 import Mathlib.Topology.Order.MonotoneConvergence
 
 /-!
@@ -9,35 +9,21 @@ import Mathlib.Topology.Order.MonotoneConvergence
 monotonically decreasing (Theorem 2.9) and bounded below, the combined loss converges, and the
 limit point is a (Pareto) stationary point.
 
-## Both halves are now formalized, with an explicit hypothesis for the one step the paper itself
-## never rigorously derives
+## Structure: two parts
 
-Theorem 2.10 has two parts of very different character:
+Theorem 2.10 has two parts:
 
 1. The combined loss `L(θ^(t)) := L_r(θ^(t)) + L_f(θ^(t))` is monotonically non-increasing (from
    Theorem 2.9, applied at every step) and bounded below (each loss `≥ 0`), hence converges to a
-   limit — a standard real-analysis fact (`tendsto_atTop_ciInf`, a monotone/antitone bounded
-   sequence of reals converges to its infimum). Proved UNCONDITIONALLY:
-   `theorem_2_10_combined_loss_converges`.
-2. The paper further argues `η^(t)g̃^(t) → 0` as `t → ∞`, hence the combined gradient vanishes at
-   the limit point `θ*`, giving stationarity, and (via `MunbaProofs.LinearDependence`) Pareto
-   stationarity. `catalog.json`'s own `known_issues_in_paper` calls this "the least rigorous step
-   in the paper's entire proof section" — the paper ASSERTS it without deriving it. A 2026-07-17
-   investigation (see `catalog.json` and `PLAN-LEAN-PROOFS.md` for the full derivation) confirmed
-   this step genuinely does NOT follow from anything proved elsewhere in the paper without an
-   additional structural assumption the paper itself never states — backed by both an explicit
-   counterexample to the paper's own Eq. (43) substitution, and an abandoned alternative proof
-   found commented out in the authors' own LaTeX source that independently hits the same wall.
-
-   **Explicit decision (2026-07-17, user instruction): formalize the paper's own full claim,
-   taking the one step it does not derive as an explicit Lean hypothesis** — the same way
-   `Optimality.lean` already takes existence of the constrained maximizer as an explicit
-   hypothesis rather than deriving it, matching the paper's own scope. This is NOT an invitation
-   to invent a different, stronger unpublished result, and NOT a mandate to instead chase the
-   authors' own abandoned compactness-based alternative proof to reach a *weaker* conclusion —
-   neither is the job here. See `theorem_2_10_stationarity`'s docstring below for exactly which
-   hypothesis is added and why it is the most direct Lean reading of what the paper itself asserts
-   at that step.
+   limit — a standard real-analysis fact (`tendsto_atTop_ciInf`, a bounded antitone real sequence
+   converges to its infimum). Proved unconditionally: `theorem_2_10_combined_loss_converges`.
+2. At the limit point `θ*`, the two players' gradients are linearly dependent (Pareto
+   stationarity), following the paper's closing argument via `LinearDependence`. The paper states
+   two steps here that it does not derive — that the trajectory `θ` converges to `θ*`, and that a
+   positive combination of the two gradients vanishes at `θ*` (`η^(t)g̃^(t) → 0`) — so both are
+   taken as explicit hypotheses (the same way `Optimality.lean` takes existence of the constrained
+   maximizer as a hypothesis). Given them, Pareto stationarity follows. See
+   `theorem_2_10_stationarity` below.
 -/
 
 namespace Munba
@@ -68,24 +54,18 @@ theorem theorem_2_10_combined_loss_converges (𝓛_r 𝓛_f : V → ℝ) (θ : �
   exact ⟨_, tendsto_atTop_ciInf hanti hbdd⟩
 
 omit [CompleteSpace V] in
-/-- Part 2 of Theorem 2.10 (Stationarity): if, at some point `θStar`, some POSITIVE combination of
-the two players' gradients vanishes, the two gradients are linearly dependent — `θStar` is a
-Pareto stationary point. This is exactly the paper's own literal closing argument ("at `θ*`,
+/-- Part 2 of Theorem 2.10 (Stationarity): if, at some point `θStar`, a positive combination of the
+two players' gradients vanishes, the two gradients are linearly dependent — `θStar` is a Pareto
+stationary point. This is the paper's closing argument ("at `θ*`,
 `g̃ = α_r∇𝓛_r(θ*) + α_f∇𝓛_f(θ*) = 0` ... implies that the per-task gradients are linearly
 dependent"), so it reuses `LinearDependence.lean`'s `gr_linearlyDependent_of_combination_eq_zero`
-directly — no new mathematical content beyond what that file already proves.
+directly.
 
-## Why `hvanish` is an explicit HYPOTHESIS here, not a derived conclusion
-
-The paper's own proof reaches `g̃(θ*) = 0` from `η^(t)g̃^(t) → 0` (`sec/X_suppl.tex` line 375 of
-the `2411.15537v4` e-print) without a rigorous derivation, and — per the 2026-07-17 investigation
-recorded in `catalog.json` — that step does not actually follow from the loss-convergence fact
-this file DOES prove (`theorem_2_10_combined_loss_converges`), without a further structural
-assumption the paper never states. There is therefore nothing legitimate to re-derive `hvanish`
-FROM using only what is already proved here. Taking it as an explicit hypothesis, exactly where
-the paper's own proof takes it as given, is the honest way to formalize the published statement
-itself — bringing in what the paper claims, not more (a stronger result via a different invented
-assumption) and not less (a weaker result via the authors' own abandoned alternative argument). -/
+`hvanish` is taken as an explicit hypothesis: the paper reaches `g̃(θ*) = 0` from `η^(t)g̃^(t) → 0`,
+which it states but does not derive, and which does not follow from the loss-value convergence
+proved here without a further assumption. Assuming it explicitly, exactly where the paper's proof
+takes it as given, formalizes the published statement as written (see `catalog.json`'s
+`known_issues_in_paper`). -/
 theorem theorem_2_10_stationarity {g_r_star g_f_star : V} {α_r α_f : ℝ}
     (hα_r_pos : 0 < α_r) (_hα_f_pos : 0 < α_f)
     (hvanish : α_r • g_r_star + α_f • g_f_star = 0) :

@@ -1,4 +1,4 @@
-import MunbaProofs.Basic
+import Basic
 
 /-!
 # Lemma 2.2 (Cone property)

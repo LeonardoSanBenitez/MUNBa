@@ -1,4 +1,4 @@
-import MunbaProofs.SolutionCharacterization
+import SolutionCharacterization
 
 /-!
 # Theorem 2.6 (Closed-form solution)
@@ -12,24 +12,21 @@ where `ξ` is a small regularization constant added purely for numerical stabili
 degenerate case. We formalize the exact (`ξ = 0`) case, valid whenever `g_r, g_f` are linearly
 independent (`sin²φ > 0`) — the degenerate case is Remark 2.7's concern, not this theorem's.
 
-## A genuinely simpler proof than the paper's own
+## Proof route
 
-`catalog.json`'s `known_issues_in_paper` flags TWO real gaps in the paper's own derivation route
-(quartic elimination → quadratic formula → an informal "we then opt for the sign that keeps
-α_f ≥ 0"): (1) the sign selection is asserted, not proved by case analysis; (2) the elimination
-divides by `g_2 = ⟪g_r,g_f⟫` without addressing `g_2 = 0`. Both gaps disappear with a different
-algebraic route, found while planning this file: multiply Theorem 2.5's two equations through by
-`α_r`, `α_f` respectively (no division needed):
+The paper's derivation goes via quartic elimination → quadratic formula → a sign selection ("we
+then opt for the sign that keeps α_f ≥ 0"). `catalog.json`'s `known_issues_in_paper` notes two
+points that route leaves implicit: the sign selection is asserted rather than proved by case
+analysis, and the elimination divides by `g_2 = ⟪g_r,g_f⟫` without addressing `g_2 = 0`. This
+file uses a route that avoids both: multiply Theorem 2.5's two equations through by `α_r`, `α_f`
+respectively (no division):
 
   `α_r² g_1 + α_r α_f g_2 = 1`, `α_f² g_3 + α_r α_f g_2 = 1`.
 
-Both right-hand sides equal `1`, so `α_r² g_1 = α_f² g_3` DIRECTLY — no quartic, no `g_2 = 0` case
-split, and (since `α_r, α_f > 0` is already known from Theorem 2.3, not something being solved
-for) no sign ambiguity either: `α_f/α_r = ‖g_r‖/‖g_f‖` is forced immediately by positivity.
-Substituting back into either equation gives `α_r²` directly. This was independently checked
-numerically (a non-parallel 2D example) before writing the Lean proof, and it reproduces the
-paper's own boxed formula exactly once expressed in `cos φ`/`sin φ` — this file proves the
-paper's own stated closed form, just via a route that happens to sidestep both flagged gaps.
+Both right-hand sides equal `1`, so `α_r² g_1 = α_f² g_3` directly — no quartic and no `g_2 = 0`
+case split, and (since `α_r, α_f > 0` is already known from Theorem 2.3) no sign ambiguity:
+`α_f/α_r = ‖g_r‖/‖g_f‖` is forced by positivity. Substituting back gives `α_r²`. This reproduces
+the paper's boxed formula (Eq. 36) exactly, expressed in `cos φ`/`sin φ`.
 -/
 
 namespace Munba

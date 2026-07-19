@@ -1,4 +1,4 @@
-import MunbaProofs.Basic
+import Basic
 
 /-!
 # Lemma 2.1 (Feasibility)
@@ -7,7 +7,7 @@ import MunbaProofs.Basic
 is strictly between `-1` and `0`, the feasible set `C = {g̃ | u_r(g̃) > 0 ∧ u_f(g̃) > 0}` is
 non-empty.
 
-## A simpler proof than the paper's own
+## Proof route (a single-witness variant)
 
 The paper parametrizes the whole segment `g̃ = α•ĝ_r + (1-α)•ĝ_f` (`ĝ` = normalized) and solves
 for a range of valid `α ∈ [0,1]` (Eqs. 9-13). We instead exhibit directly the SINGLE witness

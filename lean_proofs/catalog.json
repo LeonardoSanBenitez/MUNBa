@@ -1,0 +1,672 @@
+[
+  {
+    "id": "lemma_2_1_feasibility",
+    "label": "Lemma 2.1",
+    "name": "Feasibility",
+    "type": "lemma",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.1 'Objective' (main text) -- restated verbatim in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 3,
+      "pdf_page_proof": 13,
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "note": "Statement appears twice, word-for-word identical, on pdf_page 3 (unproved) and pdf_page 13 (immediately followed by the proof). The main-text copy is what is used downstream (Sec. 2.2, Fig. 2); the supplementary copy is the one with the attached proof."
+    },
+    "background_notation": {
+      "g_r, g_f": "gradients of preservation/forgetting losses at current theta, see shared setup",
+      "u_r, u_f": "utilities from Eq. 2-3, u_r(g)=g_r^T g, u_f(g)=g_f^T g",
+      "C": "the feasible set of joint update directions for which BOTH utilities are simultaneously positive"
+    },
+    "hypotheses": [
+      "u_r, u_f : R^n -> R are the utility functions of Eq. (2),(3) (paper literally writes their type as R^n x R^n -> R, see known_issues_in_paper)",
+      "-1 < (g_r^T g_f)/(||g_r|| ||g_f||) < 0  (the two gradients are neither orthogonal-or-aligned nor exactly opposite -- a NEGATIVE but not maximally-negative cosine similarity)"
+    ],
+    "statement_informal": "If the preservation gradient g_r and the forgetting gradient g_f have a cosine similarity strictly between -1 and 0 (i.e. they conflict, but not diametrically), then there exists a joint update direction g-tilde that is simultaneously a direction of improvement for both players (u_r(g-tilde) > 0 AND u_f(g-tilde) > 0).",
+    "statement_formal": "Let $u_r,u_f:\\mathbb{R}^n\\times\\mathbb{R}^n\\to\\mathbb{R}$ be the utility functions defined in Eqs. (2) and (3). Assume $-1 < \\frac{g_r^\\top g_f}{\\|g_r\\|\\|g_f\\|} < 0$. Define the feasible set $C$ as $C = \\{\\tilde g \\mid u_r(\\tilde g) > 0,\\ u_f(\\tilde g) > 0\\}$. Then $C$ is non-empty.",
+    "proof_as_in_paper": "*Proof.* Since we are interested in vectors that align with both $g_r$ and $g_f$ and without loss of generality, assume $\\|g_r\\|=\\|g_f\\|=1$. Consider the line segment between $g_r$ and $g_f$:\n\n$$\\tilde g = \\alpha g_r + (1-\\alpha) g_f, \\quad \\text{where } 0 \\le \\alpha \\le 1. \\qquad (9)$$\n\nNote that\n\n$$\\langle g_r,\\tilde g\\rangle = \\langle g_r,\\alpha g_r+(1-\\alpha)g_f\\rangle = \\alpha\\langle g_r,g_r\\rangle+(1-\\alpha)\\langle g_r,g_f\\rangle = \\alpha\\|g_r\\|^2+(1-\\alpha)c = \\alpha+c(1-\\alpha). \\qquad (10)$$\n\nHere, $c := \\langle g_r,g_f\\rangle$. Note that based on the assumptions $-1<c<0$. Similarly,\n\n$$\\langle g_f,\\tilde g\\rangle = \\langle g_f,\\alpha g_r+(1-\\alpha)g_f\\rangle = \\alpha c+(1-\\alpha). \\qquad (11)$$\n\nTo ensure $\\langle g_r,\\tilde g\\rangle>0$ and $\\langle g_f,\\tilde g\\rangle>0$, we need:\n\n$$\\alpha+c(1-\\alpha)>0,\\qquad \\alpha c+(1-\\alpha)>0. \\qquad (12)$$\n\nFrom $\\alpha+c(1-\\alpha)>0$, we conclude $\\alpha>\\frac{-c}{1-c}$. From $\\alpha c+(1-\\alpha)>0$, we conclude $\\alpha<\\frac{1}{1-c}$. Since $-1<c<0$,\n\n$$\\frac{-c}{1-c}<\\frac{1}{1-c},$$\n\nHence, $\\left(\\frac{-c}{1-c},\\frac{1}{1-c}\\right)$ is non-empty and one can find $\\alpha$ satisfies:\n\n$$\\frac{-c}{1-c}<\\alpha<\\frac{1}{1-c}. \\qquad (13)$$\n\nTherefore, there are points on the line segment between $g_r$ and $g_f$ that are aligned with both vectors. $\\blacksquare$\n\n[Paper adds, immediately after the box:] Note that if $\\frac{g_r^\\top g_f}{\\|g_r\\|\\|g_f\\|}\\ge 0$, there are always exit points on the line segment between $g_r$ and $g_f$ that are aligned with both vectors. The feasibility assumption would fail in scenarios where the gradients from the forgetting and preservation objectives are completely misaligned and no update can improve both objectives. Fig. 2 present examples for illustrations.",
+    "proof_technique": "explicit constructive witness (interpolation on the segment between the two normalized gradients) + 1-D interval-nonemptiness argument",
+    "proof_completeness": "self-contained",
+    "external_dependencies": [],
+    "depends_on": [],
+    "known_issues_in_paper": [
+      "The stated type signature u_r, u_f : R^n x R^n -> R does not match how u_r, u_f are used in Eqs. (2)-(3), where each is unary in the candidate direction g-tilde with g_r/g_f as fixed data. The formalization models u_r as the bilinear form curried at the fixed gradient.",
+      "The ambient space is written R^n here (and in Lemma 2.2) but R^d elsewhere in the paper, with n and d never related. The formalization works in a general real inner product space, which covers both readings at no cost.",
+      "The proof produces a witness on the closed segment [g_r, g_f]; the derived interval (-c/(1-c), 1/(1-c)) does intersect (0,1) under the hypothesis -1 < c < 0, but the paper does not spell out that intersection step."
+    ],
+    "formalization_notes": "The WLOG ||g_r|| = ||g_f|| = 1 step is discharged by an explicit normalization argument (replace g_r, g_f by their normalizations; u_r(g-tilde) > 0 iff the normalized version is, since ||g_r|| > 0). The formalization uses a single midpoint witness g-tilde = g_r/||g_r|| + g_f/||g_f|| rather than the paper's full segment parametrization, which only needs the weaker hypothesis c > -1 for existence."
+  },
+  {
+    "id": "lemma_2_2_cone_property",
+    "label": "Lemma 2.2",
+    "name": "Cone property",
+    "type": "lemma",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.1 'Objective' (main text) -- restated verbatim in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 3,
+      "pdf_page_proof": 13,
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [],
+      "note": "Proof is a short unnumbered inline derivation immediately following the restated Lemma 2.2 statement on pdf_page 13, right after Lemma 2.1's proof."
+    },
+    "background_notation": {
+      "C": "feasible set from Lemma 2.1: C = {g-tilde | u_r(g-tilde)>0, u_f(g-tilde)>0}",
+      "cone": "a set closed under multiplication by positive scalars (not claimed convex here, just a cone)"
+    },
+    "hypotheses": [],
+    "statement_informal": "The feasible set C from Lemma 2.1 is closed under positive scaling, i.e. it is a cone.",
+    "statement_formal": "The feasible set $C := \\{\\tilde g \\mid u_r(\\tilde g) > 0,\\ u_f(\\tilde g) > 0\\}$ forms a cone in $\\mathbb{R}^n$.",
+    "proof_as_in_paper": "*Proof.* Suppose $\\langle g_r,\\tilde g\\rangle>0$ and $\\langle g_f,\\tilde g\\rangle>0$. For any scalar $\\beta>0$, we have $\\langle g_r,\\beta\\tilde g\\rangle>0$ and $\\langle g_f,\\beta\\tilde g\\rangle>0$. Thus, $\\beta\\tilde g\\in C$, which demonstrates that $C$ is closed under positive scalar multiplication. Therefore, $C$ forms a cone in $\\mathbb{R}^n$. $\\blacksquare$",
+    "proof_technique": "immediate from positive-homogeneity of a linear functional (u_r, u_f are linear in g-tilde)",
+    "proof_completeness": "self-contained",
+    "external_dependencies": [],
+    "depends_on": [
+      "lemma_2_1_feasibility"
+    ],
+    "known_issues_in_paper": [
+      "The property holds for the positivity region of any pair of positively-homogeneous degree-1 functionals, not anything specific to u_r, u_f being built from gradients. The formalization proves the general fact and derives Lemma 2.2 as a corollary."
+    ],
+    "formalization_notes": "Follows from the positive-homogeneity of a linear functional's positivity region; formalized as a general lemma with Lemma 2.2 as a corollary."
+  },
+  {
+    "id": "theorem_2_3_optimality_condition",
+    "label": "Theorem 2.3",
+    "name": "Optimality condition",
+    "type": "theorem",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.2 'Solution' (main text, as Eq. 5) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": [
+        3,
+        4
+      ],
+      "pdf_page_proof": 14,
+      "equation_numbers_statement": [
+        5
+      ],
+      "equation_numbers_proof": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "note": "Main-text statement (pdf_page 3-4, spans the column break) is terser than the supplementary restatement; both assert the same content, the supplementary one additionally names the domain/codomain of f explicitly."
+    },
+    "background_notation": {
+      "f(g-tilde)": "log(u_r(g-tilde)) + log(u_f(g-tilde)), the Nash-bargaining objective of Eq. (4) in log form",
+      "lambda, zeta_r, zeta_f": "KKT multipliers for the norm-ball constraint and the two positivity constraints",
+      "epsilon": "radius of the ball B_epsilon that g-tilde is constrained to lie in (from Eq. 4)"
+    },
+    "hypotheses": [
+      "g-tilde* is a maximizer of f over the ball B_epsilon subject to u_r(g-tilde)>0, u_f(g-tilde)>0 (i.e. Eq. 4's constrained problem)",
+      "Implicitly: this feasible region is non-empty, which is exactly what Lemma 2.1/2.2 supply"
+    ],
+    "statement_informal": "At the optimum of the Nash-bargaining problem, the gradient of the log-utility objective f is proportional to the optimal direction g-tilde* itself, and moreover g-tilde* is forced to be a non-negative combination of g_r and g_f alone (not some direction with a component orthogonal to both).",
+    "statement_formal": "Define $f:\\mathbb{R}^n\\to\\mathbb{R}$ as $f(\\tilde g):=\\log(u_r(\\tilde g))+\\log(u_f(\\tilde g))$. The optimal solution $\\tilde g^*$ to Eq. (4) must satisfy\n\n$$\\nabla f(\\tilde g^*)=\\lambda\\tilde g^*,\\quad\\text{with}\\quad \\tilde g^*=\\alpha_r g_r+\\alpha_f g_f, \\qquad (5)/(14)$$\n\nwhere $\\alpha_r>0$ and $\\alpha_f>0$ for some scalar $\\lambda$.",
+    "proof_as_in_paper": "*Proof.* Let $\\tilde g^*$ denote the optimal update direction for maximizing the objective $f(\\tilde g):=\\log(u_r(\\tilde g))+\\log(u_f(\\tilde g))$. We can rewrite this optimization problem $\\max_{\\tilde g\\in\\mathcal{B}_\\epsilon}\\log(u_r(\\tilde g))+\\log(u_f(\\tilde g))$ as:\n\n$$\\min_{\\tilde g}\\ -f(\\tilde g), \\qquad (15)$$\n$$\\text{s.t. } \\|\\tilde g\\|^2\\le\\epsilon^2, \\qquad (16)$$\n$$\\text{s.t. } u_r(\\tilde g)>0,\\ u_f(\\tilde g)>0, \\qquad (17)$$\n\nThe Lagrange function with $\\lambda\\ge0,\\zeta_r\\ge0,\\zeta_f\\ge0$ is\n\n$$h(\\tilde g,\\lambda,\\zeta_r,\\zeta_f) = -\\log(u_r(\\tilde g))-\\log(u_f(\\tilde g))+\\lambda(\\|\\tilde g\\|^2-\\epsilon^2)+\\zeta_r(-u_r(\\tilde g))+\\zeta_f(-u_f(\\tilde g))$$\n$$= -\\log(g_r^\\top\\tilde g)-\\log(g_f^\\top\\tilde g)+\\lambda(\\|\\tilde g\\|^2-\\epsilon^2)-\\zeta_r g_r^\\top\\tilde g-\\zeta_f g_f^\\top\\tilde g. \\qquad (18)$$\n\nThen, using the Karush-Kuhn-Tucker (KKT) theorem [4], at the optimal solution we have\n\n$$-\\frac{g_r}{g_r^\\top\\tilde g^*}-\\frac{g_f}{g_f^\\top\\tilde g^*}+2\\lambda\\tilde g^*-\\zeta_r g_r+\\zeta_f g_f=0,$$\n$$\\lambda(\\|\\tilde g^*\\|^2-\\epsilon^2)=0,$$\n$$\\zeta_r u_r(\\tilde g^*)=0,$$\n$$\\zeta_f u_f(\\tilde g^*)=0. \\qquad (19)$$\n\nBecause $u_r(\\tilde g^*)>0$ and $u_f(\\tilde g^*)>0$, we must have $\\zeta_r=0,\\zeta_f=0$ from the complementary slackness condition. Hence, we can obtain\n\n$$\\underbrace{\\frac{g_r}{g_r^\\top\\tilde g^*}+\\frac{g_f}{g_f^\\top\\tilde g^*}}_{\\nabla f(\\tilde g^*)}=2\\lambda\\tilde g^*, \\qquad (20)$$\n\nwhere we rearrange the coefficient that is the scaling factor to be a scalar $\\lambda$, giving us\n\n$$\\boxed{\\nabla f(\\tilde g^*)=\\lambda\\tilde g^*.} \\qquad (21)$$\n\nFurthermore, note that $\\mathbb{R}^+\\ni g_r^\\top\\tilde g^*,\\ \\mathbb{R}^+\\ni g_f^\\top\\tilde g^*$, then we let $\\alpha_r=\\frac{1}{g_r^\\top\\tilde g^*}>0,\\ \\alpha_f=\\frac{1}{g_f^\\top\\tilde g^*}>0$, and set $\\lambda=1$ as a normalization step, without affecting the proportionality of $\\tilde g$, we have\n\n$$\\boxed{\\tilde g^*=\\alpha_r g_r+\\alpha_f g_f.} \\qquad (22)$$\n\nThis completes the proof. $\\blacksquare$",
+    "proof_technique": "Lagrangian duality / KKT stationarity + complementary slackness on a problem with two strict-inequality (positivity) constraints and one norm-ball constraint",
+    "proof_completeness": "self-contained (cites the KKT theorem itself as [4], a textbook fact, not the specific result being proved)",
+    "external_dependencies": [
+      {
+        "citation": "Boyd & Vandenberghe, *Convex Optimization*, Cambridge University Press, 2004 (cited as [4] / \\cite{boyd2004convex})",
+        "borrowed": "the general KKT theorem itself, used as a black-box tool, not re-derived"
+      }
+    ],
+    "depends_on": [
+      "lemma_2_1_feasibility",
+      "lemma_2_2_cone_property"
+    ],
+    "known_issues_in_paper": [
+      "Eq. (19), stationarity line: it reads '- zeta_r g_r + zeta_f g_f' (mixed signs), but differentiating the Lagrangian (Eq. 18, which has '- zeta_r g_r^T g-tilde - zeta_f g_f^T g-tilde', both with a minus) w.r.t. g-tilde gives '- zeta_r g_r - zeta_f g_f'. Harmless to the conclusion, since zeta_r = zeta_f = 0 follows immediately by complementary slackness. (Present in the arXiv LaTeX source.)",
+      "The proof does not explicitly argue lambda != 0, i.e. that the norm-ball constraint ||g-tilde*|| = epsilon is active at the optimum. It is excludable (if lambda = 0, (20)/(21) force grad f(g-tilde*) = 0, impossible since both terms are positive multiples of g_r, g_f, which are not negatives of one another under -1 < c < 0), and the formalization supplies this argument.",
+      "The final 'set lambda = 1 as a normalization step' is doing real work implicitly: (22) is an exact equality (not just up to scaling) because alpha_r, alpha_f are defined as 1/(g_r^T g-tilde*), 1/(g_f^T g-tilde*). The formalization makes explicit that this exact equality holds at ball radius epsilon = sqrt(2).",
+      "The ambient-space notation switches from R^d (theta, Sec. 2.1) to R^n here without comment, consistent with Lemma 2.1/2.2."
+    ],
+    "formalization_notes": "Formalized using Mathlib's Lagrange-multiplier theorem for a single equality constraint (IsLocalExtrOn.exists_multipliers_of_hasStrictFDerivAt_1d), together with hasStrictFDerivAt_norm_sq and HasStrictFDerivAt.log. The two positivity constraints are dropped (the feasible set is open, so they are never binding at a feasible point), and the ball constraint is shown to be active, leaving a single norm equality constraint. Evaluating the multiplier relation at g-tilde* pins the multiplier and yields the paper's exact equality (22) at epsilon = sqrt(2). Existence of the constrained maximizer is taken as an explicit hypothesis, matching the paper's own scope ('let g-tilde* denote the optimal ...')."
+  },
+  {
+    "id": "lemma_2_4_linear_dependence",
+    "label": "Lemma 2.4",
+    "name": "Linear dependence",
+    "type": "lemma",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.2 'Solution' (main text) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": [
+        14,
+        15
+      ],
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        23,
+        24
+      ],
+      "note": "Statement is one sentence on pdf_page 4 (main text); proof starts at the bottom of pdf_page 14 and concludes at the top of pdf_page 15."
+    },
+    "background_notation": {
+      "Pareto stationary point": "a point theta* such that no small local move can strictly improve one player's objective without strictly hurting the other -- the paper NEVER formally defines this itself, see known_issues_in_paper",
+      "lambda_1, lambda_2": "convex-combination weights (lambda_1+lambda_2=1, both >=0) from the first-order Pareto-optimality condition, distinct from Theorem 2.3's lambda"
+    },
+    "hypotheses": [
+      "theta (equivalently g-tilde* = alpha_r g_r + alpha_f g_f) is a Pareto stationary point of the two-player problem"
+    ],
+    "statement_informal": "At a Pareto stationary point, the preservation gradient g_r and the forgetting gradient g_f must be linearly dependent (scalar multiples of one another).",
+    "statement_formal": "$g_r$ and $g_f$ are linear dependent at the Pareto stationary point.",
+    "proof_as_in_paper": "*Proof.* Recall that our objective is $\\min_{\\tilde g\\in\\mathcal{B}_\\epsilon} -\\log(g_r^\\top\\tilde g)-\\log(g_f^\\top\\tilde g)$, through the first-order optimality condition for Pareto optimality [57, 76], we have\n\n$$-\\lambda_1\\nabla\\log(g_r^\\top\\tilde g^*)-\\lambda_2\\nabla\\log(g_f^\\top\\tilde g^*)=0,$$\n$$\\lambda_1+\\lambda_2=1,$$\n$$\\lambda_1\\ge0,\\lambda_2\\ge0, \\qquad (23)$$\n\nwhere $\\tilde g^*$ is the Pareto stationary point. This can be further rewritten as\n\n$$\\lambda_1\\frac{g_r}{g_r^\\top\\tilde g^*}+\\lambda_2\\frac{g_f}{g_f^\\top\\tilde g^*}=\\lambda_1\\alpha_r g_r+\\lambda_2\\alpha_f g_f=0, \\qquad (24)$$\n\nwhere $\\lambda_1\\alpha_r\\ge0,\\lambda_2\\alpha_f\\ge0$, indicating that $g_r$ and $g_f$ are linearly dependent. $\\blacksquare$",
+    "proof_technique": "cites an external first-order Pareto-optimality condition as a black box, then algebraically substitutes alpha_r=1/(g_r^T g-tilde*) etc. from Theorem 2.3's proof to exhibit a non-trivial vanishing linear combination of g_r, g_f",
+    "proof_completeness": "relies on external result as black box (not restated) -- the 'first-order optimality condition for Pareto optimality' from [57,76] is used as (23) but is never itself stated or proved anywhere in this paper",
+    "external_dependencies": [
+      {
+        "citation": "Ye & Liu, 'Pareto navigation gradient descent: a first-order algorithm for optimization in pareto set', UAI 2022 (cited as \\cite{ye2022pareto})",
+        "borrowed": "cited by the paper as a source for the first-order Pareto-optimality condition used in Eq. 23"
+      },
+      {
+        "citation": "Roy, So & Ma, 'Optimization on Pareto sets: On a theory of multi-objective optimization', arXiv:2308.02145 (cited as \\cite{roy2023optimization})",
+        "borrowed": "cited alongside ye2022pareto as a source for the same first-order Pareto-optimality condition"
+      }
+    ],
+    "depends_on": [
+      "theorem_2_3_optimality_condition"
+    ],
+    "known_issues_in_paper": [
+      "The paper does not formally define 'Pareto stationary point'. The formalization uses the standard reading for two minimized objectives: no direction d is a strict descent direction for both, i.e. for all d, not (<g_r,d> < 0 and <g_f,d> < 0).",
+      "The proof imports a first-order Pareto-optimality condition (Eq. 23) from the cited multi-objective-optimization literature rather than deriving it. The formalization instead proves the needed two-vector case directly, so no external condition is assumed.",
+      "The multipliers lambda_1, lambda_2 here are unrelated to the Lagrange multiplier lambda in Theorem 2.3, despite the shared symbol family."
+    ],
+    "formalization_notes": "Proved constructively from the no-common-strict-descent-direction hypothesis via a two-vector instance of Gordan's theorem of the alternative: if the Gram determinant is positive (g_r, g_f linearly independent), solving the 2x2 Gram system by Cramer's rule yields an explicit common strict descent direction, so contraposition gives linear dependence (the Gram determinant vanishes). This avoids both the external Pareto condition and general convex-cone duality. The elementary helper 'a vanishing positive combination implies dependence' is also provided and reused by Theorem 2.10's closing step."
+  },
+  {
+    "id": "theorem_2_5_solution_characterization",
+    "label": "Theorem 2.5",
+    "name": "Solution characterization",
+    "type": "theorem",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.2 'Solution' (main text, as Eq. 6) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": 15,
+      "equation_numbers_statement": [
+        6,
+        7
+      ],
+      "equation_numbers_proof": [
+        25,
+        26
+      ],
+      "note": "Main text also gives, right after the theorem, an equivalent 2x2 system (Eq. 7) obtained by expanding G^T G alpha = 1/alpha componentwise; this system is what Theorem 2.6's proof actually solves in closed form."
+    },
+    "background_notation": {
+      "G": "the d x 2 matrix [g_r  g_f] (columns are the two gradients)",
+      "alpha": "[alpha_r, alpha_f]^T in R^2, the coefficient vector from Theorem 2.3",
+      "1/alpha": "elementwise reciprocal [1/alpha_r, 1/alpha_f]^T, NOT a matrix inverse"
+    },
+    "hypotheses": [
+      "g-tilde* = alpha_r g_r + alpha_f g_f is the optimality-condition solution from Theorem 2.3"
+    ],
+    "statement_informal": "The coefficient vector alpha=(alpha_r,alpha_f) that determines the optimal joint direction g-tilde*=alpha_r g_r+alpha_f g_f is exactly the (elementwise-reciprocal) fixed point of the 2x2 Gram-matrix equation G^T G alpha = 1/alpha.",
+    "statement_formal": "Denote $\\boldsymbol\\alpha = [\\alpha_r\\ \\alpha_f]^\\top \\in \\mathbb{R}_+^2$, $G = [g_r\\ g_f] \\in \\mathbb{R}^{d\\times 2}$, then the solution to Eq. (5), up to scaling, is $\\tilde g^* = (\\alpha_r g_r + \\alpha_f g_f)$ where $\\boldsymbol\\alpha$ is the solution to\n\n$$G^\\top G\\boldsymbol\\alpha = 1/\\boldsymbol\\alpha. \\qquad (6)/(26)$$\n\n[Immediately after, main text unpacks this into the equivalent explicit 2x2 system, Eq. 7:]\n\n$$\\alpha_r\\|g_r\\|_2^2 + \\alpha_f(g_f^\\top g_r) = 1/\\alpha_r,$$\n$$\\alpha_f\\|g_f\\|_2^2 + \\alpha_r(g_f^\\top g_r) = 1/\\alpha_f. \\qquad (7)$$",
+    "proof_as_in_paper": "*Proof.* We follow the same steps in Theorem 3.2 of [78]. Note that $\\tilde g^*=\\alpha_r g_r+\\alpha_f g_f$ (Eq. (22)), multiplying both sides with $g_r$ or $g_f$, we obtain\n\n$$(\\alpha_r g_r^\\top+\\alpha_f g_f^\\top)g_r=g_r^\\top\\tilde g^*=1/\\alpha_r,$$\n$$(\\alpha_r g_r^\\top+\\alpha_f g_f^\\top)g_f=g_f^\\top\\tilde g^*=1/\\alpha_f, \\qquad (25)$$\n\nthereafter concluding to\n\n$$\\boxed{G^\\top G\\boldsymbol\\alpha = 1/\\boldsymbol\\alpha.} \\qquad (26)$$ $\\blacksquare$",
+    "proof_technique": "direct substitution/dot-product with g_r, g_f into the Theorem 2.3 characterization, using alpha_r=1/(g_r^T g-tilde*) etc. as already established; the citation to an external Theorem 3.2 is announced but the algebra actually given is fully self-contained (does not require reading [78])",
+    "proof_completeness": "self-contained (the phrase 'we follow the same steps in [78]' is present but every step is spelled out; formalizing does not require external material)",
+    "external_dependencies": [
+      {
+        "citation": "Zeng, Yang, Chen, Ferrer, Jin, Jordan & Jia, 'Fairness-Aware Meta-Learning via Nash Bargaining', arXiv:2406.07029 (cited as [78] / \\cite{zeng2024fairness})",
+        "borrowed": "structural inspiration only -- the paper explicitly notes its own version needs 'no need to assume the linear independence of gradients', i.e. it is a variant, not a direct instantiation, of [78]'s theorem. Not needed to check the proof as given."
+      }
+    ],
+    "depends_on": [
+      "theorem_2_3_optimality_condition"
+    ],
+    "known_issues_in_paper": [
+      "The 'up to scaling' qualifier is a bit at odds with Theorem 2.3's proof, which pins alpha_r, alpha_f exactly via the lambda = 1 normalization. It most likely refers to the ball radius never entering the final formula (a scale degree of freedom), not to alpha_r/alpha_f being ambiguous.",
+      "Eq. (6) as printed, 'G^T G alpha = 1/alpha', overloads the reciprocal notation on a vector; it must be read as an elementwise reciprocal per component, confirmed by Eq. (7)'s explicit two-scalar unpacking."
+    ],
+    "formalization_notes": "Two dot-product identities from substituting Theorem 2.3's characterization, packaged into the paper's 2x2 system (Eq. 7). The elementwise-reciprocal reading of 1/alpha is encoded as two scalar equations."
+  },
+  {
+    "id": "theorem_2_6_closed_form_solution",
+    "label": "Theorem 2.6",
+    "name": "Closed-form solution",
+    "type": "theorem",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.2 'Solution' (main text, as Eq. 8) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": [
+        15,
+        16,
+        17
+      ],
+      "equation_numbers_statement": [
+        8
+      ],
+      "equation_numbers_proof": [
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36
+      ],
+      "note": "Longest and algebraically densest proof in the paper; spans the bottom of pdf_page 15 through the top of pdf_page 17."
+    },
+    "background_notation": {
+      "K": "the 2x2 Gram matrix G^T G = [[g_r^T g_r, g_r^T g_f],[g_r^T g_f, g_f^T g_f]] =: [[g1,g2],[g2,g3]]",
+      "phi": "the angle between g_r and g_f, i.e. cos(phi) = (g_r^T g_f)/(||g_r|| ||g_f||)",
+      "xi": "a small positive regularization constant to avoid division by zero when sin(phi)=0"
+    },
+    "hypotheses": [
+      "alpha solves the system of Theorem 2.5 / Eq. (7)-(28)"
+    ],
+    "statement_informal": "The coefficients alpha_r, alpha_f from Theorem 2.5's fixed-point equation admit an explicit closed form in terms of the two gradient norms and the angle phi between them -- no numerical/iterative solve of the 2x2 system is needed at each training step.",
+    "statement_formal": "Denote the Gram matrix $\\mathbb{R}^{2\\times2}\\ni K := G^\\top G = \\begin{bmatrix} g_r^\\top g_r & g_r^\\top g_f \\\\ g_r^\\top g_f & g_f^\\top g_f\\end{bmatrix} = \\begin{bmatrix} g_1 & g_2 \\\\ g_2 & g_3\\end{bmatrix}$, and denote $\\phi$ as the angle between $g_r$ and $g_f$. Then, closed-form solution for $\\boldsymbol\\alpha$ in $\\tilde g^* = \\alpha_r g_r + \\alpha_f g_f$ is\n\n$$\\begin{cases} \\alpha_r = \\frac{1}{\\|g_r\\|}\\sqrt{\\frac{1-\\cos(\\phi)}{\\sin^2(\\phi)+\\xi}}, \\\\ \\alpha_f = \\frac{1}{\\|g_f\\|}\\sqrt{\\frac{1-\\cos(\\phi)}{\\sin^2(\\phi)+\\xi}}. \\end{cases} \\qquad (8)/(27)$$\n\nwhere $\\xi$ represents a very small value to avoid division by zero.",
+    "proof_as_in_paper": "*Proof.* We can rewrite Eq. (25) as\n\n$$\\begin{cases} g_1\\alpha_r+g_2\\alpha_f=1/\\alpha_r, \\\\ g_2\\alpha_r+g_3\\alpha_f=1/\\alpha_f, \\end{cases} \\qquad (28)$$\n\nfrom the first equation in Eq. (28), we can obtain the expression for $\\alpha_f$ which is\n\n$$\\boxed{\\alpha_f = \\frac{1-g_1\\alpha_r^2}{g_2\\alpha_r}.} \\qquad (29)$$\n\nThen, substitute $\\alpha_f$ into the second equation in Eq. (28), we get the quartic equation in terms of $\\alpha_r$ as\n\n$$(g_1^2g_3-g_1g_2^2)\\cdot\\alpha_r^4-2g_1g_3\\cdot\\alpha_r^2+g_3=0. \\qquad (30)$$\n\nDenote $\\alpha_r^2$ as $z$, we have a quadratic equation in terms of $z$:\n\n$$(g_1^2g_3-g_1g_2^2)\\cdot z^2-2g_1g_3\\cdot z+g_3=0. \\qquad (31)$$\n\nWith the quadratic formula, we have:\n\n$$z = \\frac{2g_1g_3\\pm\\sqrt{4g_1^2g_3^2-4(g_1^2g_3-g_1g_2^2)g_3}}{2(g_1^2g_3-g_1g_2^2)} = \\frac{g_1g_3\\pm g_2\\sqrt{g_1g_3}}{g_1^2g_3-g_1g_2^2}. \\qquad (32)$$\n\nHence, $\\alpha_r$ would be\n\n$$\\boxed{\\alpha_r = \\sqrt{\\frac{g_1g_3\\pm g_2\\sqrt{g_1g_3}}{g_1^2g_3-g_1g_2^2}}.} \\qquad (33)$$\n\nThen, substitute $\\alpha_r$ in Eq. (29), we can obtain $\\alpha_f$ as well.\n\nDenote $\\phi$ as the angle between $g_r$ and $g_f$, then for $\\alpha_r$, we have\n\n$$\\alpha_r = \\sqrt{\\frac{g_1g_3-g_2\\sqrt{g_1g_3}}{g_1^2g_3-g_1g_2^2}} = \\sqrt{\\frac{\\|g_r\\|^2\\|g_f\\|^2\\pm\\|g_r\\|\\|g_f\\|\\cos(\\phi)\\sqrt{\\|g_r\\|^2\\|g_f\\|^2}}{\\|g_r\\|^4\\|g_f\\|^2-\\|g_r\\|^2(\\|g_r\\|\\|g_f\\|\\cos(\\phi))^2}}$$\n$$= \\sqrt{\\frac{\\|g_r\\|^2\\|g_f\\|^2(1\\pm\\cos(\\phi))}{\\|g_r\\|^4\\|g_f\\|^2(1-\\cos^2(\\phi))}}$$\n$$= \\frac{1}{\\|g_r\\|}\\cdot\\sqrt{\\frac{1\\pm\\cos(\\phi)}{\\sin^2(\\phi)}}\\ge0. \\qquad (34)$$\n\nThen for $\\alpha_f$, we have\n\n$$\\alpha_f = \\frac{1-g_1\\alpha_r^2}{g_2\\alpha_r} = \\frac{1-\\|g_r\\|^2\\left|\\frac{1\\pm\\cos(\\phi)}{\\|g_r\\|^2\\sin^2(\\phi)}\\right|}{\\|g_r\\|\\|g_f\\|\\cos(\\phi)\\frac{1}{\\|g_r\\|}\\sqrt{\\frac{1\\pm\\cos(\\phi)}{\\sin^2(\\phi)}}}$$\n$$= \\frac{1}{\\|g_f\\|}\\cdot\\frac{1-\\frac{1\\pm\\cos(\\phi)}{1-\\cos^2(\\phi)}}{\\cos(\\phi)}\\cdot\\sqrt{\\frac{\\sin^2(\\phi)}{1\\pm\\cos(\\phi)}}$$\n$$= \\frac{1}{\\|g_f\\|}\\cdot\\frac{-\\cos^2(\\phi)\\mp\\cos(\\phi)}{\\sin^2(\\phi)\\cos(\\phi)}\\cdot\\sqrt{\\frac{\\sin^2(\\phi)}{1\\pm\\cos(\\phi)}}. \\qquad (35)$$\n\nTo ensure $\\alpha_f\\ge0$, we then opt for\n\n$$\\boxed{\\alpha_r = \\frac{1}{\\|g_r\\|}\\cdot\\sqrt{\\frac{1-\\cos(\\phi)}{\\sin^2(\\phi)+\\xi}}, \\quad \\alpha_f = \\frac{1}{\\|g_f\\|}\\cdot\\sqrt{\\frac{1-\\cos(\\phi)}{\\sin^2(\\phi)+\\xi}}.} \\qquad (36)$$\n\nwhere $\\xi$ represents a very small value to avoid division by zero. This completes the proof. $\\blacksquare$",
+    "proof_technique": "elimination (reduce 2x2 nonlinear system to a single quartic, substitute z=alpha_r^2 to get a quadratic, solve via the quadratic formula, resolve the resulting sign ambiguity by the alpha_f>=0 requirement)",
+    "proof_completeness": "self-contained",
+    "external_dependencies": [],
+    "depends_on": [
+      "theorem_2_5_solution_characterization"
+    ],
+    "known_issues_in_paper": [
+      "The elimination (28) -> (30) and the discriminant simplification in (32) are algebraically correct (the discriminant reduces to 4 g1 g2^2 g3).",
+      "The final sign choice ('to ensure alpha_f >= 0, we then opt for' the '- cos(phi)' branch) is an informal case selection, not a proof: the paper does not show the '+' branch is infeasible in all cases nor that the '-' branch is always well-defined and non-negative.",
+      "Division by g_2 = g_r^T g_f is used repeatedly (Eq. 29, Eq. 34) without addressing the case g_2 = 0 (g_r perpendicular to g_f); this is presumably folded into the xi-regularization at the end, but the intermediate derivation implicitly assumes g_2 != 0.",
+      "Division by alpha_r is used from (28) to (29); alpha_r = 0 is never excluded explicitly, though it is already excluded by Lemma 2.8's positive lower bound."
+    ],
+    "formalization_notes": "Formalized via a route that multiplies Theorem 2.5's two equations through by alpha_r, alpha_f (no division): both right-hand sides equal 1, giving alpha_r^2 ||g_r||^2 = alpha_f^2 ||g_f||^2 directly, with no quartic and no sign case-split (alpha_r, alpha_f > 0 is already known from Theorem 2.3). Positivity then fixes alpha_f/alpha_r = ||g_r||/||g_f||, and substitution gives the closed form; this reproduces the paper's Eq. (36) exactly. The Gram-determinant identity ||g_r||^2 ||g_f||^2 - <g_r,g_f>^2 = ||g_r||^2 ||g_f||^2 sin^2(phi) underlies (34)-(35) and is the hypothesis (sin^2(phi) > 0) the paper's own formula needs."
+  },
+  {
+    "id": "remark_2_7_degenerate_gram_matrix",
+    "label": "Remark 2.7",
+    "name": "(unnamed -- degenerate/aligned-gradient case)",
+    "type": "remark",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.2 'Solution' (main text, immediately after Theorem 2.6)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": null,
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [],
+      "note": "No proof is given anywhere in the paper (including the supplementary Sec. 6 Proofs, which does not mention Remark 2.7 at all) -- consistent with it being presented as an informal remark, not a numbered/proved result."
+    },
+    "background_notation": {
+      "zeta": "scalar such that g_r = zeta * g_f (linear dependence constant), distinct from Theorem 2.3's lambda and Lemma 2.4's lambda_1,lambda_2",
+      "det(K)": "determinant of the Gram matrix K from Theorem 2.6, det(K) = g1*g3 - g2^2 = ||g_r||^2||g_f||^2 sin^2(phi)"
+    },
+    "hypotheses": [
+      "g_r and g_f are linearly dependent, i.e. g_r = zeta*g_f for some scalar zeta"
+    ],
+    "statement_informal": "When the two gradients become exactly (anti-)parallel, the Gram matrix K becomes singular and Theorem 2.6's closed form breaks down (0/0). The remark proposes two informal fixes: perturb the smaller-norm gradient with noise when the gradients point in opposite directions (zeta<0), or simply split the update 50/50 when they point in the same direction (zeta>=0).",
+    "statement_formal": "If $g_r$ and $g_f$ are linearly dependent, i.e., for some scalar $\\zeta$, $g_r = \\zeta g_f$, the determinant of the Gram matrix $K$ will become zero. To address this, we can add some noise to the gradient with a smaller norm to break dependence for $\\zeta < 0$, enabling a well-defined solution for $\\boldsymbol\\alpha$. When $\\zeta \\ge 0$, $g_r$ and $g_f$ is aligned, we can simply choose $\\boldsymbol\\alpha = [0.5\\ 0.5]^\\top$.",
+    "proof_as_in_paper": "No proof is given in the paper; presented as an informal remark with a practical mitigation, not a claim requiring formal justification in the authors' own framing.",
+    "proof_technique": "none given (informal)",
+    "proof_completeness": "no proof given in paper (informal remark)",
+    "external_dependencies": [],
+    "depends_on": [
+      "theorem_2_6_closed_form_solution"
+    ],
+    "known_issues_in_paper": [
+      "Only the first claim ('g_r = zeta g_f implies det(K) = 0') is a provable mathematical statement; the noise-injection and 0.5/0.5 fixes are engineering heuristics, not mathematical claims, and are out of scope for the formalization.",
+      "The claim is stated in the one direction needed (dependence implies det(K) = 0); the converse is also standard but the paper only asserts the direction it uses."
+    ],
+    "formalization_notes": "A small standalone lemma: linearly dependent vectors have a singular 2x2 Gram matrix. The heuristic fixes are not formalized (nothing to prove)."
+  },
+  {
+    "id": "lemma_2_8_lower_bound",
+    "label": "Lemma 2.8",
+    "name": "Lower bound",
+    "type": "lemma",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.3 'Theoretical Properties' (main text) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": [
+        16,
+        17
+      ],
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        37,
+        38,
+        39
+      ],
+      "note": "Proof starts at the bottom of pdf_page 16 (eq. 37-38) and concludes at the top of pdf_page 17 (eq. 39)."
+    },
+    "background_notation": {
+      "M": "an assumed finite upper bound on ||g_i|| for i in {r,f}",
+      "i, j": "range over {r,f}, with j denoting 'the other player' when i is fixed"
+    },
+    "hypotheses": [
+      "For player i in {r,f}, ||g_i|| is bounded by some finite M < infinity"
+    ],
+    "statement_informal": "As long as the per-player gradient norms stay bounded by M, the bargaining coefficients alpha_r, alpha_f from Theorem 2.6 cannot collapse to zero -- they stay at least 1/(sqrt(2) M) away from zero.",
+    "statement_formal": "For player $i \\in \\{r, f\\}$, assume $\\|g_i\\|$ is bounded by $M < \\infty$, then $\\|\\alpha_i\\| \\ge \\frac{1}{\\sqrt{2}M}$.",
+    "proof_as_in_paper": "*Proof.* Following the same steps in [78], recall that $\\tilde g = \\alpha_r g_r + \\alpha_f g_f$, Eq. (25) gives us $1/\\alpha_i = (\\alpha_i g_i^\\top + \\alpha_j g_j^\\top)g_i$ for $i,j \\in \\{r,f\\}$. We have\n\n$$\\|\\alpha_i g_i+\\alpha_j g_j\\|_2^2 = \\|(\\alpha_i g_i+\\alpha_j g_j)^\\top\\tilde g\\|_2^2$$\n$$= \\|(\\alpha_i g_i+\\alpha_j g_j)^\\top(\\alpha_i g_i)+(\\alpha_i g_i+\\alpha_j g_j)^\\top(\\alpha_j g_j)\\|_2^2$$\n$$= \\|\\alpha_i\\cdot1/\\alpha_i+\\alpha_j\\cdot1/\\alpha_j\\|_2^2 = 2, \\qquad (37)$$\n\nthen\n\n$$\\left\\|\\frac{1}{\\alpha_i}\\right\\| = \\|(\\alpha_i g_i^\\top+\\alpha_j g_j^\\top)g_i\\| \\le \\|\\alpha_i g_i+\\alpha_j g_j\\|\\cdot\\|g_i\\| \\le \\sqrt2 M. \\qquad (38)$$\n\nThis can be rewritten as\n\n$$\\boxed{\\|\\alpha_i\\| \\ge \\frac{1}{\\sqrt2 M}.} \\qquad (39)$$\n\nThis completes the proof. $\\blacksquare$\n\n[Main text adds, right after the statement:] Note that the condition in Lemma 2.8 may not hold in scenarios involving unstable loss landscapes, where gradients may explode, thus invalidating the result.",
+    "proof_technique": "algebraic identity for ||g-tilde||^2=2 (see known_issues_in_paper) combined with Cauchy-Schwarz to bound |1/alpha_i|, then inverted",
+    "proof_completeness": "self-contained, modulo a confirmed typesetting error in eq. (37) that does not affect the (independently cross-checked) final numeric result",
+    "external_dependencies": [
+      {
+        "citation": "Zeng, Yang, Chen, Ferrer, Jin, Jordan & Jia, 'Fairness-Aware Meta-Learning via Nash Bargaining', arXiv:2406.07029 (cited as [78] / \\cite{zeng2024fairness})",
+        "borrowed": "structural inspiration only, same caveat as Theorem 2.5 -- the algebra given is self-contained"
+      }
+    ],
+    "depends_on": [
+      "theorem_2_5_solution_characterization",
+      "theorem_2_3_optimality_condition"
+    ],
+    "known_issues_in_paper": [
+      "Eq. (37): the middle lines wrap a squared norm ||.||^2 around the scalar (alpha_i g_i + alpha_j g_j)^T g-tilde (a dot product). Read as plain scalar equalities they give ||g-tilde||^2 = (alpha_i g_i + alpha_j g_j)^T g-tilde = alpha_i (g-tilde^T g_i) + alpha_j (g-tilde^T g_j) = alpha_i (1/alpha_i) + alpha_j (1/alpha_j) = 2, the same ||g-tilde||^2 = 2 that Eq. (41) obtains cleanly. (Present in the arXiv LaTeX source.)",
+      "'||alpha_i||' for a positive scalar alpha_i is just alpha_i; the formalization uses alpha_i directly."
+    ],
+    "formalization_notes": "Formalized via the corrected reading of Eq. (37): ||g-tilde||^2 = 2 is proved once as a reusable lemma (by direct bilinear expansion, as in Theorem 2.9's Eq. 41), then Cauchy-Schwarz and a one-line inversion give the bound alpha_i >= 1/(sqrt(2) M)."
+  },
+  {
+    "id": "lemma_6_1_descent_lemma",
+    "label": "Lemma 6.1",
+    "name": "(unnamed -- Lipschitz-smoothness descent lemma)",
+    "type": "lemma",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 6 'Proofs' (Supplementary) -- this lemma is introduced fresh here; it has NO counterpart/statement anywhere in the main text",
+      "pdf_page_statement": 17,
+      "pdf_page_proof": 17,
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        40
+      ],
+      "note": "Stated and proved back-to-back on pdf_page 17, immediately before Theorem 2.9's proof, which cites it as 'Lemma 6.1'."
+    },
+    "background_notation": {
+      "L (as Lipschitz constant)": "constant such that grad(Loss) is L-Lipschitz; NOT the same symbol as the loss function L (calligraphic L in the paper) -- both rendered as 'L' in plain text/ASCII here, disambiguate carefully",
+      "theta, theta'": "two arbitrary points in parameter space"
+    },
+    "hypotheses": [
+      "The loss function L is differentiable ('differential' in the paper's wording) and Lipschitz-smooth with constant L > 0 (i.e. grad(L) is L-Lipschitz)"
+    ],
+    "statement_informal": "The standard 'descent lemma' / quadratic upper bound from Lipschitz-smooth optimization: a Lipschitz-smooth function is upper-bounded by its first-order Taylor expansion plus a quadratic penalty term.",
+    "statement_formal": "Assume the loss function $\\mathcal{L}$ is differential and Lipschitz-smooth with constant $L > 0$, then $\\mathcal{L}(\\theta') \\le \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + \\frac{L}{2}\\|\\theta'-\\theta\\|^2$.",
+    "proof_as_in_paper": "*Proof.* We employ the same strategy as in Lemma A.1 of [47]. The loss function is assumed to be Lipschitz continuous so $\\|\\nabla\\mathcal{L}(\\theta')-\\nabla\\mathcal{L}(\\theta)\\| \\le L\\|\\theta'-\\theta\\|$, with Taylor's expansion of $\\mathcal{L}(\\theta')$ around $\\theta$,\n\n$$\\mathcal{L}(\\theta') = \\mathcal{L}(\\theta) + \\int_0^1 \\nabla\\mathcal{L}(\\theta+t(\\theta'-\\theta))^\\top(\\theta'-\\theta)\\,dt$$\n$$= \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + \\int_0^1\\left[\\nabla\\mathcal{L}(\\theta+t(\\theta'-\\theta))^\\top(\\theta'-\\theta)-\\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta)\\right]dt$$\n$$\\le \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + \\int_0^1\\|\\nabla\\mathcal{L}(\\theta+t(\\theta'-\\theta))-\\nabla\\mathcal{L}(\\theta)\\|\\cdot\\|(\\theta'-\\theta)\\|\\,dt$$\n$$\\le \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + \\int_0^1 L\\|t(\\theta'-\\theta)\\|\\cdot\\|(\\theta'-\\theta)\\|\\,dt$$\n$$= \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + L\\|\\theta'-\\theta\\|^2\\int_0^1 t\\,dt$$\n$$= \\mathcal{L}(\\theta) + \\nabla\\mathcal{L}(\\theta)^\\top(\\theta'-\\theta) + \\frac{L}{2}\\|\\theta'-\\theta\\|^2. \\qquad (40)$$ $\\blacksquare$",
+    "proof_technique": "fundamental theorem of calculus (Taylor expansion with integral remainder) + Lipschitz gradient bound + Cauchy-Schwarz, standard textbook descent lemma for L-smooth functions",
+    "proof_completeness": "self-contained",
+    "external_dependencies": [
+      {
+        "citation": "Navon, Shamsian, Achituve, Maron, Kawaguchi, Chechik & Fetaya, 'Multi-task learning as a bargaining game', ICML 2022 (cited as [47] / \\cite{navon2022multi}), Lemma A.1",
+        "borrowed": "structural proof template; the derivation given is fully self-contained and standard"
+      }
+    ],
+    "depends_on": [],
+    "known_issues_in_paper": [
+      "'differential' is presumably meant as 'differentiable'; not otherwise an issue.",
+      "This is the standard descent lemma for L-smooth functions and follows from general facts already available in Mathlib, rather than needing the integral-remainder Taylor argument re-proved from scratch."
+    ],
+    "formalization_notes": "The formalization states Lemma 6.1 in the paper's own notation and derives it by specializing two general Mathlib facts (a Riesz-representation-aware gradient, HasGradientAt, and a general derivative-comparison/fencing theorem), which replace the paper's integral-remainder Taylor argument."
+  },
+  {
+    "id": "theorem_2_9_pareto_improvement",
+    "label": "Theorem 2.9",
+    "name": "Pareto improvement",
+    "type": "theorem",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.3 'Theoretical Properties' (main text) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": 17,
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        41,
+        42
+      ],
+      "note": "Proof is entirely on pdf_page 17, immediately after Lemma 6.1's proof, which it invokes by name."
+    },
+    "background_notation": {
+      "L_i(theta^(t))": "loss for player i in {r,f} at iteration t (calligraphic L; distinct in spirit from the Lipschitz constant L, same glyph in plain text)",
+      "eta^(t)": "the (per-iteration, implicitly per-player-dependent) learning rate at step t",
+      "alpha_i^(t)": "the bargaining coefficient for player i at step t, i.e. alpha_r or alpha_f evaluated at theta^(t)"
+    },
+    "hypotheses": [
+      "L_i(theta^(t)) is differentiable and Lipschitz-smooth with constant L > 0, for both i in {r,f}",
+      "The learning rate at step t is set to eta^(t) = min(1/(L alpha_i^(t))) -- read as the min over i in {r,f}, see known_issues_in_paper"
+    ],
+    "statement_informal": "With the MUNBa update and a learning rate capped by 1/(L*alpha_i) for the WORSE-conditioned player, neither player's loss increases at any single step -- the bargained update is a genuine Pareto improvement (weakly) at every iteration.",
+    "statement_formal": "Let $\\mathcal{L}_i(\\theta^{(t)})$ denote the loss function for player $i \\in \\{r,f\\}$ at step $t$, where $r$ and $f$ represent the preservation player and the forgetting player, respectively. Assume $\\mathcal{L}_i(\\theta^{(t)})$ is differential and Lipschitz-smooth with constant $L > 0$, if the learning rate at step $t$ is set to $\\eta^{(t)} = \\min_{i\\in\\{r,f\\}} \\frac{1}{L\\alpha_i^{(t)}}$, then the update ensures $\\mathcal{L}_i(\\theta^{(t+1)}) \\le \\mathcal{L}_i(\\theta^{(t)})$ for both players.",
+    "proof_as_in_paper": "*Proof.* We follow the same steps as in Theorem 5.4 of [47] but with a slightly different upper bound for the learning rate. First, for the bargained update $\\tilde g$, we have\n\n$$\\|\\tilde g\\|^2 = \\|\\alpha_r g_r+\\alpha_f g_f\\|^2 = \\alpha_r(\\alpha_r\\|g_r\\|^2+\\alpha_f g_f^\\top g_r)+\\alpha_f(\\alpha_r g_r^\\top g_f+\\alpha_f\\|g_f\\|^2)$$\n$$= \\alpha_r\\cdot\\frac{1}{\\alpha_r}+\\alpha_f\\cdot\\frac{1}{\\alpha_f} = 2. \\qquad (41)$$\n\nWith $\\theta^{(t+1)}=\\theta^{(t)}-\\eta^{(t)}\\tilde g^{(t)}$ and Lemma 6.1, $\\forall i\\in\\{r,f\\}$, we have\n\n$$\\mathcal{L}_i(\\theta^{(t+1)}) \\le \\mathcal{L}_i(\\theta^{(t)}) - \\eta^{(t)}(g_i^{(t)})^\\top\\tilde g^{(t)} + \\frac{L}{2}\\|\\eta^{(t)}\\tilde g\\|^2$$\n$$= \\mathcal{L}_i(\\theta^{(t)}) - \\eta^{(t)}\\cdot\\frac{1}{\\alpha_i^{(t)}} + L\\cdot(\\eta^{(t)})^2$$\n$$\\le \\mathcal{L}_i(\\theta^{(t)}) + \\eta^{(t)}\\cdot\\left(L\\frac{1}{L\\alpha_i^{(t)}}-\\frac{1}{\\alpha_i^{(t)}}\\right) \\le \\mathcal{L}_i(\\theta^{(t)}). \\qquad (42)$$ $\\blacksquare$",
+    "proof_technique": "apply Lemma 6.1's descent inequality along the bargained direction, substitute the identities g_i^T g-tilde = 1/alpha_i and ||g-tilde||^2=2 established earlier, then use eta^(t) <= 1/(L alpha_i^(t)) to cancel the quadratic term against the linear descent term",
+    "proof_completeness": "self-contained algebra given the identities from theorem_2_5/theorem_2_3 and lemma_6_1; the citation to [47] is again structural inspiration only",
+    "external_dependencies": [
+      {
+        "citation": "Navon et al., 'Multi-task learning as a bargaining game', ICML 2022 (cited as [47] / \\cite{navon2022multi}), Theorem 5.4",
+        "borrowed": "structural template ('same steps ... but with a slightly different upper bound for the learning rate'); the paper explicitly flags its own bound as different from [47]'s, so [47]'s specific theorem statement is not needed to check this proof, only the general proof pattern"
+      }
+    ],
+    "depends_on": [
+      "lemma_6_1_descent_lemma",
+      "lemma_2_8_lower_bound",
+      "theorem_2_5_solution_characterization",
+      "theorem_2_3_optimality_condition"
+    ],
+    "known_issues_in_paper": [
+      "The hypothesis 'eta^(t) = min(1/(L alpha_i^(t)))' is elliptical about what the min ranges over. The proof only goes through if read as min over i in {r,f} (so eta^(t) <= 1/(L alpha_i^(t)) holds for BOTH players simultaneously, which the last inequality of (42) needs). The formalization states this explicitly.",
+      "The proof silently uses g_i^(t) = grad(L_i)(theta^(t)) (from Sec. 2.1's notation) when invoking Lemma 6.1's gradient term; correct, but the substitution is implicit."
+    ],
+    "formalization_notes": "Depends on three earlier identities (||g-tilde||^2 = 2, g_i^T g-tilde = 1/alpha_i, and Lemma 6.1's descent inequality), formalized as reusable lemmas rather than re-derived inline. The symmetric-in-{r,f} argument is proved once as a single-player descent step and applied twice."
+  },
+  {
+    "id": "theorem_2_10_convergence",
+    "label": "Theorem 2.10",
+    "name": "Convergence",
+    "type": "theorem",
+    "paper": {
+      "title": "MUNBa: Machine Unlearning via Nash Bargaining",
+      "authors": [
+        "Jing Wu",
+        "Mehrtash Harandi"
+      ],
+      "affiliation": "Monash University, Melbourne, VIC, Australia",
+      "arxiv_id": "2411.15537v4",
+      "arxiv_url": "https://arxiv.org/abs/2411.15537",
+      "source_file": "https://arxiv.org/pdf/2411.15537",
+      "pdf_pages_total": 28,
+      "page_numbering_note": "The 'pdf_page' fields are 1-indexed physical page numbers of the arXiv PDF. Page 1 is the title/abstract; the main paper runs through Sec. 5; Sec. 6 'Proofs' (Supplementary Material) begins at pdf_page 13.",
+      "source_verification_note": "Statements and proof transcriptions were cross-checked against the paper's arXiv LaTeX source (arxiv.org/e-print/2411.15537)."
+    },
+    "location": {
+      "section": "Sec. 2.2.3 'Theoretical Properties' (main text) -- restated + proved in Sec. 6 'Proofs' (Supplementary)",
+      "pdf_page_statement": 4,
+      "pdf_page_proof": [
+        17,
+        18
+      ],
+      "equation_numbers_statement": [],
+      "equation_numbers_proof": [
+        43
+      ],
+      "note": "Proof begins at the bottom of pdf_page 17 and concludes on pdf_page 18 (which is otherwise blank below the proof)."
+    },
+    "background_notation": {
+      "L(theta)": "the combined/overall loss (unspecified exact combination in the statement itself, treated as some aggregate of L_r, L_f)",
+      "theta*": "the limit/stationary point the parameters converge to",
+      "M = 1.0": "the specific gradient-clipping bound used in the proof (concrete instantiation of Lemma 2.8's abstract M)"
+    },
+    "hypotheses": [
+      "Each player's loss L_i(theta^(t)) is monotonically decreasing (from Theorem 2.9) and bounded below",
+      "(used only in the proof, not stated in the theorem itself) gradients are clipped so ||g|| <= M = 1.0"
+    ],
+    "statement_informal": "Putting Theorem 2.9 (monotone per-player descent) together with a below-boundedness assumption, the overall training loop converges: the combined loss reaches a limit value, and the parameters reach a point where the bargained gradient vanishes -- which, by Lemma 2.4-style reasoning, is a Pareto stationary point.",
+    "statement_formal": "Since each player's loss $\\mathcal{L}_i(\\theta^{(t)})$ is monotonically decreasing and bounded below, the combined loss $\\mathcal{L}(\\theta)$ converges to $\\mathcal{L}(\\theta^*)$ and $\\theta^*$ is the stationary point of $\\mathcal{L}(\\theta)$.",
+    "proof_as_in_paper": "*Proof.* In practice, we clip gradients to let $\\|g\\| \\le M = 1.0$ to ensure stability during optimization [51]. Note that the learning rate $\\eta^{(t)} = \\min\\frac{1}{L\\alpha_i^{(t)}}$, so $\\eta^{(t)} \\le \\frac{1}{L\\alpha_i^{(t)}} \\le \\frac{\\sqrt2 M}{L} < \\frac{\\sqrt2}{L}$. Then, for the combined loss $\\mathcal{L}$, we have\n\n$$\\mathcal{L}(\\theta^{(t+1)}) \\approx \\mathcal{L}(\\theta^{(t)}) + \\nabla\\mathcal{L}(\\theta^{(t)})^\\top(\\theta^{t+1}-\\theta^t) + \\frac{L}{2}\\|\\eta^{(t)}\\tilde g\\|^2$$\n$$= \\mathcal{L}(\\theta^{(t)}) - \\eta^{(t)}\\tilde g^\\top\\tilde g^\\top + \\frac{L}{2}\\|\\eta^{(t)}\\tilde g\\|^2$$\n$$= \\mathcal{L}(\\theta^{(t)}) + \\eta^t\\|\\tilde g\\|^2\\left(\\frac{L}{2}\\eta^t-1\\right)$$\n$$< \\mathcal{L}(\\theta^{(t)}). \\qquad (43)$$\n\nHence, $\\mathcal{L}(\\theta^{(t)})$ is monotonically decreasing. Also, $\\mathcal{L}(\\theta^{(t)})$ is bounded below by 0, therefore, it converges to some limit point $\\mathcal{L}(\\theta^*)$. For $t\\to\\infty$, we have $\\eta^{(t)}\\tilde g^{(t)}\\to0$, hence, we have $\\tilde g = \\nabla\\mathcal{L}(\\theta^*) = 0$ at $\\theta^*$, indicating that $\\theta^*$ is the stationary point of the loss function $\\mathcal{L}(\\theta)$.\n\nFurther, at $\\theta^*$, $\\tilde g = \\alpha_r\\mathcal{L}_r(\\theta^*)+\\alpha_f\\mathcal{L}_f(\\theta^*)=0$ [sic, see known_issues_in_paper -- should read $\\alpha_r\\nabla\\mathcal{L}_r(\\theta^*)+\\alpha_f\\nabla\\mathcal{L}_f(\\theta^*)=0$], implies that the per-task gradients are linearly dependent. Any small movement from $\\theta^*$ will improve another objective only at the expense of the other, therefore $\\theta^*$ is the Pareto stationary point. $\\blacksquare$",
+    "proof_technique": "descent-lemma-style single-step decrease bound (as in Theorem 2.9, but applied to the combined loss directly) + monotone-bounded-sequence convergence + a first-order-stationarity-implies-linear-dependence closing argument mirroring Lemma 2.4",
+    "proof_completeness": "Contains two literal typos (see known_issues_in_paper); once they are read as intended, the argument is a standard monotone-convergence argument, self-contained modulo the same external Pareto-stationarity correspondence as Lemma 2.4. The asymptotic step (eta^(t) g-tilde^(t) -> 0, hence grad L(theta*) = 0) is asserted rather than derived; the formalization takes the corresponding step as an explicit hypothesis.",
+    "external_dependencies": [
+      {
+        "citation": "Pascanu, Mikolov & Bengio, 'On the difficulty of training recurrent neural networks', ICML 2013 (cited as [51] / \\cite{pascanu2013difficulty})",
+        "borrowed": "justification for the gradient-clipping practice (M=1.0), an implementation detail, not a mathematical dependency"
+      },
+      {
+        "citation": "(implicit) [57, 76] via the Lemma 2.4-style closing step",
+        "borrowed": "same first-order Pareto-stationarity correspondence used in Lemma 2.4"
+      }
+    ],
+    "depends_on": [
+      "theorem_2_9_pareto_improvement",
+      "lemma_2_8_lower_bound",
+      "lemma_6_1_descent_lemma",
+      "lemma_2_4_linear_dependence"
+    ],
+    "known_issues_in_paper": [
+      "Eq. (43): the term 'eta^(t) g-tilde^T g-tilde^T' carries a transpose on both copies of g-tilde; it should be 'eta^(t) g-tilde^T g-tilde' = eta^(t) ||g-tilde||^2, which is what the next line uses.",
+      "Closing line: 'g-tilde = alpha_r L_r(theta*) + alpha_f L_f(theta*) = 0' uses the loss values (scalars) where it seems to mean the gradients, 'g-tilde = alpha_r grad L_r(theta*) + alpha_f grad L_f(theta*) = alpha_r g_r + alpha_f g_f = 0'.",
+      "The proof re-derives 'eta^(t) <= sqrt(2)/L' from Lemma 2.8 and M = 1.0 rather than citing Theorem 2.9's setup; mild redundancy, not an error.",
+      "The first line of (43) uses '~' (approx) where Lemma 6.1 actually gives an exact upper bound (<=); '<=' would match the guarantee that licenses the following strict inequality.",
+      "As in Lemma 2.4, the final Pareto-stationarity conclusion leans on the unstated external first-order Pareto condition.",
+      "The asymptotic step 'for t -> infinity, eta^(t) g-tilde^(t) -> 0' is asserted, not derived: convergence of the loss value alone does not imply it without a further assumption (for example, the bargaining coefficients alpha_i staying bounded, equivalently the two gradients not becoming arbitrarily close to degenerate). Relatedly, the first substitution in (43) treats <g_r + g_f, g-tilde> as ||g-tilde||^2, whereas <g_r + g_f, g-tilde> = 1/alpha_r + 1/alpha_f, which equals ||g-tilde||^2 = 2 only when alpha_r = alpha_f. The formalization takes the vanishing bargained-gradient combination at theta* as an explicit hypothesis."
+    ],
+    "formalization_notes": "Formalized in two parts: (1) theorem_2_10_combined_loss_converges, the unconditional convergence of the combined loss (a monotone, bounded-below real sequence converges, standard); (2) theorem_2_10_stationarity / theorem_2_10_convergence, Pareto stationarity of the limit point, with the two steps the paper states but does not derive taken as explicit hypotheses: that the trajectory theta(t) itself converges to theta*, and that a positive combination of the two gradients vanishes at theta*. Given those, linear dependence follows by reusing the Lemma 2.4 helper. Both typos are formalized in their corrected form."
+  }
+]

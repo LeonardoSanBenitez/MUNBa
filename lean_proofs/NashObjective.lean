@@ -1,23 +1,21 @@
-import MunbaProofs.Basic
-import MunbaProofs.ConeProperty
+import Basic
+import ConeProperty
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
 
 /-!
 # Building block for Theorem 2.3: the Nash-bargaining objective and its scale-shift identity
 
 `catalog.json`'s `theorem_2_3_optimality_condition`. This file is the first of several building
-blocks toward Theorem 2.3 (mirrors how the I-CARE project built `ResidualGraph.lean`/
-`AugmentingPath.lean` before assembling `MaxFlowMinCut.lean` — a genuinely hard paper result gets
-its own supporting infrastructure, not one monolithic proof).
+blocks toward Theorem 2.3: the harder results are split into supporting pieces rather than one
+monolithic proof.
 
 Defines MUNBa's objective `f(g̃) = log(u_r(g̃)) + log(u_f(g̃))` (the paper's Eq. 4/15, in log
-form) and proves a fact the paper's own proof of Theorem 2.3 never states explicitly, but needs:
-**the paper never argues why the ball constraint `‖g̃‖ ≤ ε` is active at the optimum** (flagged in
-`catalog.json`'s `known_issues_in_paper`: "the proof never argues λ != 0 ... i.e. that the
-norm-ball constraint is ACTUALLY active/binding"). We supply that argument here, purely
-algebraically (no differential calculus needed for this half): since `u_r, u_f` are linear, `f`
-has a clean scale-shift identity under positive rescaling, which combined with Lemma 2.2 (`C` is a
-cone) forces any maximizer to sit exactly on the boundary of the ball.
+form) and establishes a fact used by Theorem 2.3 that the paper's proof does not separately
+argue: that the ball constraint `‖g̃‖ ≤ ε` is active at the optimum (see `catalog.json`'s
+`known_issues_in_paper`, on `λ ≠ 0`). This is shown here purely algebraically (no differential
+calculus needed for this half): since `u_r, u_f` are linear, `f` has a clean scale-shift identity
+under positive rescaling, which combined with Lemma 2.2 (`C` is a cone) forces any maximizer to
+sit exactly on the boundary of the ball.
 -/
 
 namespace Munba
@@ -56,10 +54,11 @@ theorem ne_zero_of_mem_feasibleSet {g_r g_f gt : V} (hgt : gt ∈ feasibleSet g_
   have hr := hgt.1
   simp [utility] at hr
 
-/-- **The ball constraint is active at any maximizer** (the step `catalog.json` flags the paper as
-never arguing): if `gt` maximizes MUNBa's objective over `feasibleSet g_r g_f` intersected with
-the closed ball of radius `ε`, then `‖gt‖ = ε` exactly — the maximizer cannot lie in the ball's
-interior. Proof: if `‖gt‖ < ε`, scaling `gt` up to the boundary (`t := ε / ‖gt‖ > 1`) stays
+/-- **The ball constraint is active at any maximizer** (used by Theorem 2.3; see `catalog.json`'s
+`known_issues_in_paper`): if `gt` maximizes MUNBa's objective over `feasibleSet g_r g_f`
+intersected with the closed ball of radius `ε`, then `‖gt‖ = ε` exactly — the maximizer cannot
+lie in the ball's interior. Proof: if `‖gt‖ < ε`, scaling `gt` up to the boundary
+(`t := ε / ‖gt‖ > 1`) stays
 feasible (Lemma 2.2, `C` is a cone) and stays in the ball (`‖t • gt‖ = ε`), while strictly
 increasing the objective (`nashObjective_smul` + `Real.log` strictly increasing, `t > 1`) —
 contradicting maximality. -/
