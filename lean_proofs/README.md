@@ -1,30 +1,14 @@
 # Lean 4 / Mathlib formalization of MUNBa's theoretical results
 
-Machine-checked (Lean 4 + [Mathlib](https://github.com/leanprover-community/mathlib4)) proofs of MUNBa's mathematical results: Lemmas 2.1, 2.2, 2.4, 2.8, 6.1, Theorems 2.3, 2.5, 2.6, 2.9, 2.10, and Remark 2.7.
-
-## Status
-
-All 11 results are formalized, with zero `sorry` and `#print axioms` reporting only the standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`):
-
-- **Lemma 2.1** (Feasibility) — `Feasibility.lean`
-- **Lemma 2.2** (Cone property) — `ConeProperty.lean`
-- **Lemma 6.1** (Lipschitz-smoothness descent lemma) — `DescentLemma.lean`
-- **Theorem 2.3** (Optimality condition, the KKT-style stationarity result) — `NashObjective.lean` + `SphereExtremum.lean` + `Optimality.lean`
-- **Theorem 2.5** (Solution characterization) — `SolutionCharacterization.lean`
-- **Lemma 2.8** (Lower bound) — `LowerBound.lean`
-- **Theorem 2.9** (Pareto improvement) — `ParetoImprovement.lean`
-- **Theorem 2.6** (Closed-form solution) — `ClosedFormSolution.lean`
-- **Remark 2.7** (degenerate Gram matrix) — `DegenerateGram.lean`
-- **Lemma 2.4** (Linear dependence) — `LinearDependence.lean`. Proved from a Pareto-stationarity hypothesis (no common strict descent direction for $g_r, g_f$) via a two-vector instance of Gordan's theorem of the alternative, with a short constructive proof (solve the $2 \times 2$ Gram system via Cramer's rule for an explicit witness direction) rather than general convex-cone machinery.
-- **Theorem 2.10** (Convergence) — `Convergence.lean`. Both halves proved; see the dedicated section below for the hypotheses used.
-
-(Lemma 2.8 and Theorem 2.9 were proved before Theorem 2.6, out of the paper's own numbering order — neither depends on it, so both were tractable earlier.)
+Machine-checked (Lean 4 + [Mathlib](https://github.com/leanprover-community/mathlib4)) proofs of MUNBa's mathematical results: Lemmas 2.1, 2.2, 2.4, 2.8, 6.1, Theorems 2.3, 2.5, 2.6, 2.9, 2.10, and Remark 2.7. Everything builds with zero `sorry`, and `#print axioms` on every result reports only the standard classical axioms (`propext`, `Classical.choice`, `Quot.sound`).
 
 ## How to build
 
 Requires a Lean 4 toolchain (`elan`/`lake`). Run `lake build` in this folder.
 
 ## What is proved
+
+Each result lives in its own file (a few of the harder ones are split across two or three files that build up to the final statement).
 
 - `Basic.lean` — shared setup. Works in an arbitrary real inner product space $V$ rather than committing to a specific $\mathbb{R}^n$/$\mathbb{R}^d$ (the paper uses both). Models the utility functions $u_r$, $u_f$ (Eqs. 2-3) as unary in the candidate joint direction, with each player's gradient as fixed data.
 
